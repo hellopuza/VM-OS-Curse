@@ -45,7 +45,7 @@ public:
 
     Stack& operator = (const Stack& obj)
     {
-        clean();
+        delete[] data_;
 
         size_cur_ = obj.size_cur_;
         capacity_ = obj.capacity_;
