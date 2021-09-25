@@ -12,7 +12,6 @@
 #define STACK_H_INCLUDED
 
 #include <iostream>
-#include <cstring>
 #include <new>
 
 const size_t DEFAULT_STACK_CAPACITY = 8;
@@ -40,17 +39,21 @@ public:
     {
         data_ = new TYPE[capacity_] {};
 
-        for (int i = 0; i < capacity_; ++i) data_[i] = obj.data_[i];
+        for (size_t i = 0; i < capacity_; ++i)
+            data_[i] = obj.data_[i];
     }
 
     Stack& operator = (const Stack& obj)
     {
+        clean();
+
         size_cur_ = obj.size_cur_;
         capacity_ = obj.capacity_;
 
         data_ = new TYPE[capacity_]{};
 
-        for (int i = 0; i < capacity_; ++i) data_[i] = obj.data_[i];
+        for (size_t i = 0; i < capacity_; ++i)
+            data_[i] = obj.data_[i];
     }
 
     ~Stack ()
@@ -63,18 +66,18 @@ public:
         capacity_ = 0;
     }
 
-    void Push (TYPE value)
+    void push (TYPE value)
     {
         if (size_cur_ == capacity_ - 1) Expand();
 
         data_[size_cur_++] = value;
     }
 
-    TYPE Pop ()
+    TYPE pop ()
     {
         if (size_cur_ == 0)
         {
-            this->~Stack();
+            delete[] data_;
             printf("Stack is empty\n");
             exit(-1);
         }
@@ -82,22 +85,24 @@ public:
         return data_[--size_cur_];
     }
 
+    TYPE top ()
+    {
+        if (size_cur_ == 0)
+        {
+            delete[] data_;
+            printf("Stack is empty\n");
+            exit(-1);
+        }
+
+        return data_[size_cur_ - 1];
+    }
+
     size_t getSize () const
     {
         return size_cur_;
     }
 
-    TYPE& operator [] (size_t n)
-    {
-        return data_[n];
-    }
-
-    const TYPE& operator [] (size_t n) const
-    {
-        return data_[n];
-    }
-
-    void Clean ()
+    void clean ()
     {
         size_cur_ = 0;
         delete[] data_;
@@ -113,10 +118,10 @@ private:
     {
         capacity_ *= 2;
 
-        TYPE* temp = nullptr;
-        temp = new TYPE[capacity_] {};
+        TYPE* temp = new TYPE[capacity_] {};
 
-        memcpy(temp, (char*)data_, capacity_ * sizeof(TYPE) / 2);
+        for (size_t i = 0; i < capacity_ / 2; ++i)
+            temp[i] = data_[i];
 
         delete[] data_;
         data_ = temp;

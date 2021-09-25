@@ -2,8 +2,7 @@
 
 CC = g++
 CFLAGS = -c -O3
-LDFLAGS =
-SOURCES = main.cpp
+SOURCES = main.cpp Complex.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 EXECUTABLE = Complex
 
