@@ -78,7 +78,7 @@ public:
         if (size_cur_ == 0)
         {
             delete[] data_;
-            printf("Stack is empty\n");
+            std::cout << "Stack is empty\n";
             exit(-1);
         }
         
@@ -90,7 +90,7 @@ public:
         if (size_cur_ == 0)
         {
             delete[] data_;
-            printf("Stack is empty\n");
+            std::cout << "Stack is empty\n";
             exit(-1);
         }
 
