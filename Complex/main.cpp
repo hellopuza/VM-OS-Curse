@@ -13,23 +13,23 @@
 #include <complex>
 #include <iostream>
 
-bool isNIL (double num)
+bool isNIL (float num)
 {
-    return (abs(num) < 1e-7);
+    return abs(num) < 1e-7;
 }
 
 #define INIT_TEST \
-        std::complex<double> std_c1; \
-        std::complex<double> std_c2; \
+        std::complex<float> std_c1; \
+        std::complex<float> std_c2; \
         Complex my_res; \
-        std::complex<double> std_res;
+        std::complex<float> std_res;
 
 #define TEST(c1, c2, op) \
         std_c1 = {c1.re, c1.im}; \
         std_c2 = {c2.re, c2.im}; \
         my_res = c1 op c2; \
         std_res = std_c1 op std_c2; \
-        printf("TEST( (%.5lf, %.5lf) " #op " (%.5lf, %.5lf) = (%.5lf, %.5lf) || (%.5lf, %.5lf)\t%s\n", \
+        printf("TEST( (%.5f, %.5f) " #op " (%.5f, %.5f) = (%.5f, %.5f) || (%.5f, %.5f)\t%s\n", \
                c1.re, c1.im, c2.re, c2.im, my_res.re, my_res.im, real(std_res), imag(std_res), \
                (isNIL(my_res.re - real(std_res)) && isNIL(my_res.im - imag(std_res))) ? "SUCCESSFUL" : "FAILED");
 

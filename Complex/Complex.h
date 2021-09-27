@@ -13,12 +13,12 @@
 
 struct Complex
 {
-    double re;
-    double im;
+    float re;
+    float im;
 
     Complex ();
 
-    Complex (double real, double imag);
+    Complex (float real, float imag);
 
     ~Complex ();
     
