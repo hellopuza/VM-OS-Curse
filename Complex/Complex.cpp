@@ -5,10 +5,12 @@
     * Author:      Artem Puzankov                                              *
     * Email:       puzankov.ao@phystech.edu                                    *
     * GitHub:      https://github.com/hellopuza                                *
-    * Copyright Â© 2021 Artem Puzankov. All rights reserved.                    *
+    * Copyright © 2021 Artem Puzankov. All rights reserved.                    *
     *///------------------------------------------------------------------------
 
 #include "Complex.h"
+#include <iostream>
+#include <cmath>
 
 Complex::Complex() :
     re(0.0),
