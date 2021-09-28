@@ -8,8 +8,8 @@
     * Copyright © 2021 Artem Puzankov. All rights reserved.                    *
     *///------------------------------------------------------------------------
 
-#ifndef STACK_H_INCLUDED
-#define STACK_H_INCLUDED
+#ifndef STACK_STACK_H_INCLUDED
+#define STACK_STACK_H_INCLUDED
 
 #include <iostream>
 #include <new>
@@ -19,8 +19,8 @@ const size_t DEFAULT_STACK_CAPACITY = 8;
 template <typename TYPE>
 class Stack
 {
-    size_t  capacity_ = DEFAULT_STACK_CAPACITY;
     size_t  size_cur_ = 0;
+    size_t  capacity_ = DEFAULT_STACK_CAPACITY;
 
     TYPE* data_;
 
@@ -41,6 +41,14 @@ public:
             data_[i] = obj.data_[i];
     }
 
+    Stack (Stack&& obj) :
+        size_cur_(obj.size_cur_),
+        capacity_(obj.capacity_),
+        data_    (obj.data_)
+	{
+        obj.data_ = nullptr;
+    }
+
     Stack& operator = (const Stack& obj)
     {
         delete[] data_;
@@ -55,6 +63,18 @@ public:
 
         return *this;
     }
+
+    Stack& operator = (Stack&& obj)
+	{
+        size_cur_ = obj.size_cur_;
+        capacity_ = obj.capacity_;
+
+		delete[] data_;
+		data_ = obj.data_;
+		obj.data_ = nullptr;
+ 
+		return *this;
+	}
 
     ~Stack ()
     {
@@ -76,14 +96,14 @@ public:
 
     TYPE pop ()
     {
-        test_empty();
+        check_empty();
         
         return data_[--size_cur_];
     }
 
     TYPE top ()
     {
-        test_empty();
+        check_empty();
 
         return data_[size_cur_ - 1];
     }
@@ -118,7 +138,7 @@ private:
         data_ = temp;
     }
 
-    void test_empty ()
+    void check_empty ()
     {
         if (size_cur_ == 0)
         {
@@ -129,4 +149,4 @@ private:
     }
 };
 
-#endif // STACK_H_INCLUDED
+#endif // STACK_STACK_H_INCLUDED
