@@ -7,8 +7,6 @@
     * Copyright © 2021 Artem Puzankov. All rights reserved.                    *
     *///------------------------------------------------------------------------
 
-#define _CRT_SECURE_NO_WARNINGS
-
 #include "Stack.h"
 
 template <typename TYPE>
