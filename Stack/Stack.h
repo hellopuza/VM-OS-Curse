@@ -11,16 +11,15 @@
 #ifndef STACK_STACK_H_INCLUDED
 #define STACK_STACK_H_INCLUDED
 
-#include <iostream>
 #include <new>
 
-const size_t DEFAULT_STACK_CAPACITY = 8;
+constexpr size_t DEFAULT_STACK_CAPACITY = 8;
 
 template <typename TYPE>
 class Stack
 {
-    size_t  size_cur_ = 0;
-    size_t  capacity_ = DEFAULT_STACK_CAPACITY;
+    size_t size_cur_ = 0;
+    size_t capacity_ = DEFAULT_STACK_CAPACITY;
 
     TYPE* data_;
 
@@ -96,15 +95,11 @@ public:
 
     TYPE pop ()
     {
-        check_empty();
-        
         return data_[--size_cur_];
     }
 
-    TYPE top ()
+    TYPE top () const
     {
-        check_empty();
-
         return data_[size_cur_ - 1];
     }
 
@@ -136,16 +131,6 @@ private:
 
         delete[] data_;
         data_ = temp;
-    }
-
-    void check_empty ()
-    {
-        if (size_cur_ == 0)
-        {
-            delete[] data_;
-            std::cout << "Stack is empty\n";
-            exit(-1);
-        }
     }
 };
 

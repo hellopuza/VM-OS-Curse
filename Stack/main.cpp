@@ -8,6 +8,7 @@
     *///------------------------------------------------------------------------
 
 #include "Stack.h"
+#include <iostream>
 
 template <typename TYPE>
 void test_push_top (TYPE value1, TYPE value2)

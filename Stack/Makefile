@@ -5,7 +5,7 @@ CFLAGS = -c -O3
 LDFLAGS =
 SOURCES = main.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
-EXECUTABLE = .Stack
+EXECUTABLE = Stack
 
 all: $(SOURCES) $(EXECUTABLE) clean
 
