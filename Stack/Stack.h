@@ -19,12 +19,10 @@ const size_t DEFAULT_STACK_CAPACITY = 8;
 template <typename TYPE>
 class Stack
 {
-private:
-
     size_t  capacity_ = DEFAULT_STACK_CAPACITY;
     size_t  size_cur_ = 0;
 
-    TYPE* data_ = nullptr;
+    TYPE* data_;
 
 public:
 
@@ -54,6 +52,8 @@ public:
 
         for (size_t i = 0; i < capacity_; ++i)
             data_[i] = obj.data_[i];
+
+        return *this;
     }
 
     ~Stack ()
@@ -68,45 +68,36 @@ public:
 
     void push (TYPE value)
     {
-        if (size_cur_ == capacity_ - 1) Expand();
+        if (size_cur_ == capacity_ - 1)
+            expand();
 
         data_[size_cur_++] = value;
     }
 
     TYPE pop ()
     {
-        if (size_cur_ == 0)
-        {
-            delete[] data_;
-            std::cout << "Stack is empty\n";
-            exit(-1);
-        }
+        test_empty();
         
         return data_[--size_cur_];
     }
 
     TYPE top ()
     {
-        if (size_cur_ == 0)
-        {
-            delete[] data_;
-            std::cout << "Stack is empty\n";
-            exit(-1);
-        }
+        test_empty();
 
         return data_[size_cur_ - 1];
     }
 
-    size_t getSize () const
+    size_t size () const
     {
         return size_cur_;
     }
 
     void clean ()
     {
-        size_cur_ = 0;
         delete[] data_;
 
+        size_cur_ = 0;
         capacity_ = DEFAULT_STACK_CAPACITY;
 
         data_ = new TYPE[capacity_] {};
@@ -114,7 +105,7 @@ public:
 
 private:
 
-    void Expand ()
+    void expand ()
     {
         capacity_ *= 2;
 
@@ -125,6 +116,16 @@ private:
 
         delete[] data_;
         data_ = temp;
+    }
+
+    void test_empty ()
+    {
+        if (size_cur_ == 0)
+        {
+            delete[] data_;
+            std::cout << "Stack is empty\n";
+            exit(-1);
+        }
     }
 };
 
