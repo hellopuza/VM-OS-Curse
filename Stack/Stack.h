@@ -45,7 +45,7 @@ public:
         size_cur_(obj.size_cur_),
         capacity_(obj.capacity_),
         data_    (obj.data_)
-	{
+    {
         obj.data_ = nullptr;
     }
 
@@ -65,16 +65,16 @@ public:
     }
 
     Stack& operator = (Stack&& obj)
-	{
+    {
         size_cur_ = obj.size_cur_;
         capacity_ = obj.capacity_;
 
-		delete[] data_;
-		data_ = obj.data_;
-		obj.data_ = nullptr;
+        delete[] data_;
+        data_ = obj.data_;
+        obj.data_ = nullptr;
  
-		return *this;
-	}
+        return *this;
+    }
 
     ~Stack ()
     {
