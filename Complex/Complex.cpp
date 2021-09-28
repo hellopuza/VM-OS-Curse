@@ -5,7 +5,7 @@
     * Author:      Artem Puzankov                                              *
     * Email:       puzankov.ao@phystech.edu                                    *
     * GitHub:      https://github.com/hellopuza                                *
-    * Copyright © 2021 Artem Puzankov. All rights reserved.                    *
+    * Copyright ï¿½ 2021 Artem Puzankov. All rights reserved.                    *
     *///------------------------------------------------------------------------
 
 #include "Complex.h"
@@ -17,7 +17,7 @@ Complex::Complex() :
     im(0.0)
 {}
 
-Complex::Complex(double real, double imag) :
+Complex::Complex(float real, float imag) :
     re(real),
     im(imag)
 {}
@@ -112,7 +112,7 @@ Complex& Complex::operator /= (const Complex& c)
     return *this;
 }
 
-Complex Complex::operator - ()
+Complex Complex::operator - () const
 {
     return Complex(-re, -im);
 }

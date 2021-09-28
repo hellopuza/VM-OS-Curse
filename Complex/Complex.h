@@ -52,7 +52,7 @@ struct Complex
 
     Complex& operator /= (const Complex& c);
 
-    Complex operator - ();
+    Complex operator - () const;
 };
 
 #endif // COMPLEX_H_INCLUDED
