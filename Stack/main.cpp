@@ -25,7 +25,11 @@ void test_push_pop (TYPE value1, TYPE value2)
     Stack<TYPE> stk;
     stk.push(value1);
     stk.push(value2);
-    printf("test push-pop \t\t\t%s\n", (value2 == stk.pop()) && (value1 == stk.pop()) ? "SUCCESSFUL" : "FAILED");
+
+    TYPE test_value1 = stk.top();
+    stk.pop();
+    TYPE test_value2 = stk.top();
+    printf("test push-pop \t\t\t%s\n", (value2 == test_value1) && (value1 == test_value2) ? "SUCCESSFUL" : "FAILED");
 }
 
 template <typename TYPE>
@@ -86,7 +90,8 @@ void test_after_clean (TYPE value1, TYPE value2)
     stk.push(value1);
     stk.push(value2);
     bool test = (stk.size() == 2);
-    test = test && (value2 == stk.pop());
+    test = test && (value2 == stk.top());
+    stk.pop();
     test = test && (value1 == stk.top());
     test = test && (stk.size() == 1);
     printf("test after-clean \t\t%s\n", test ? "SUCCESSFUL" : "FAILED");
@@ -104,7 +109,8 @@ void test_big_size (TYPE value1, TYPE value2, TYPE value3)
         stk.push(value2);
         stk.push(value3);
         stk.push(value1);
-        test = test && (value1 == stk.pop());
+        test = test && (value1 == stk.top());
+        stk.pop();
         test = test && (value3 == stk.top());
         test_size += 3;
     }
@@ -119,7 +125,11 @@ void test_assignment (TYPE value1, TYPE value2)
     stk1.push(value2);
     Stack<TYPE> stk2;
     stk2 = stk1;
-    printf("test assignment \t\t%s\n", (value2 == stk2.pop()) && (value1 == stk2.pop()) ? "SUCCESSFUL" : "FAILED");
+
+    TYPE test_value1 = stk2.top();
+    stk2.pop();
+    TYPE test_value2 = stk2.top();
+    printf("test assignment \t\t%s\n", (value2 == test_value1) && (value1 == test_value2) ? "SUCCESSFUL" : "FAILED");
 }
 
 template <typename TYPE>
@@ -129,7 +139,11 @@ void test_copy_constructor (TYPE value1, TYPE value2)
     stk1.push(value1);
     stk1.push(value2);
     Stack<TYPE> stk2(stk1);
-    printf("test copy-constructor \t\t%s\n", (value2 == stk2.pop()) && (value1 == stk2.pop()) ? "SUCCESSFUL" : "FAILED");
+
+    TYPE test_value1 = stk2.top();
+    stk2.pop();
+    TYPE test_value2 = stk2.top();
+    printf("test copy-constructor \t\t%s\n", (value2 == test_value1) && (value1 == test_value2) ? "SUCCESSFUL" : "FAILED");
 }
 
 int main()

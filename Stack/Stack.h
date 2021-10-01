@@ -18,7 +18,7 @@ constexpr size_t DEFAULT_STACK_CAPACITY = 8;
 template <typename TYPE>
 class Stack
 {
-    size_t size_cur_ = 0;
+    size_t size_ = 0;
     size_t capacity_ = DEFAULT_STACK_CAPACITY;
 
     TYPE* data_;
@@ -31,7 +31,7 @@ public:
     }
 
     Stack (const Stack& obj) :
-        size_cur_(obj.size_cur_),
+        size_    (obj.size_),
         capacity_(obj.capacity_)
     {
         data_ = new TYPE[capacity_] {};
@@ -41,7 +41,7 @@ public:
     }
 
     Stack (Stack&& obj) :
-        size_cur_(obj.size_cur_),
+        size_    (obj.size_),
         capacity_(obj.capacity_),
         data_    (obj.data_)
     {
@@ -52,7 +52,7 @@ public:
     {
         delete[] data_;
 
-        size_cur_ = obj.size_cur_;
+        size_ = obj.size_;
         capacity_ = obj.capacity_;
 
         data_ = new TYPE[capacity_]{};
@@ -65,7 +65,7 @@ public:
 
     Stack& operator = (Stack&& obj)
     {
-        size_cur_ = obj.size_cur_;
+        size_ = obj.size_;
         capacity_ = obj.capacity_;
 
         delete[] data_;
@@ -77,7 +77,7 @@ public:
 
     ~Stack ()
     {
-        size_cur_ = 0;
+        size_ = 0;
 
         if (data_ != nullptr) delete[] data_;
         data_ = nullptr;
@@ -87,32 +87,42 @@ public:
 
     void push (TYPE value)
     {
-        if (size_cur_ == capacity_ - 1)
+        if (size_ == capacity_ - 1)
             expand();
 
-        data_[size_cur_++] = value;
+        data_[size_++] = value;
     }
 
-    TYPE pop ()
+    void pop ()
     {
-        return data_[--size_cur_];
+        --size_;
     }
 
-    TYPE top () const
+    TYPE& top ()
     {
-        return data_[size_cur_ - 1];
+        return data_[size_ - 1];
+    }
+
+    const TYPE& top () const
+    {
+        return data_[size_ - 1];
     }
 
     size_t size () const
     {
-        return size_cur_;
+        return size_;
+    }
+
+    bool empty () const
+    {
+        return size_ == 0;
     }
 
     void clean ()
     {
         delete[] data_;
 
-        size_cur_ = 0;
+        size_ = 0;
         capacity_ = DEFAULT_STACK_CAPACITY;
 
         data_ = new TYPE[capacity_] {};
