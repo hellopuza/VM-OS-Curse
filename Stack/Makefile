@@ -2,15 +2,14 @@
 
 CC = g++
 CFLAGS = -c -O3
-LDFLAGS =
-SOURCES = main.cpp
+SOURCES = main.cpp Stack.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 EXECUTABLE = Stack
 
 all: $(SOURCES) $(EXECUTABLE) clean
 
-$(EXECUTABLE): $(OBJECTS) 
-	$(CC) $(LDFLAGS) $(OBJECTS) $(LIBS) -o $@
+$(EXECUTABLE): $(OBJECTS)
+	$(CC) $(OBJECTS) $(LIBS) -o $@
 
 .cpp.o:
 	$(CC) $(CFLAGS) $< -o $@

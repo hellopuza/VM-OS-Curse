@@ -11,137 +11,38 @@
 #ifndef STACK_STACK_H_INCLUDED
 #define STACK_STACK_H_INCLUDED
 
-#include <new>
+#include <cstdlib>
 
-constexpr size_t DEFAULT_STACK_CAPACITY = 8;
-
-template <typename TYPE>
 class Stack
 {
-    size_t size_ = 0;
-    size_t capacity_ = DEFAULT_STACK_CAPACITY;
+    size_t size_;
+    size_t capacity_;
 
-    TYPE* data_;
+    int* data_;
 
 public:
 
-    Stack ()
-    {
-        data_ = new TYPE[capacity_] {};
-    }
+    Stack ();
 
-    Stack (const Stack& obj) :
-        size_    (obj.size_),
-        capacity_(obj.capacity_)
-    {
-        data_ = new TYPE[capacity_] {};
+    Stack (const Stack& obj);
+    Stack (Stack&& obj);
 
-        for (size_t i = 0; i < capacity_; ++i)
-            data_[i] = obj.data_[i];
-    }
+    Stack& operator = (const Stack& obj);
+    Stack& operator = (Stack&& obj);
 
-    Stack (Stack&& obj) :
-        size_    (obj.size_),
-        capacity_(obj.capacity_),
-        data_    (obj.data_)
-    {
-        obj.data_ = nullptr;
-    }
+    ~Stack ();
 
-    Stack& operator = (const Stack& obj)
-    {
-        delete[] data_;
-
-        size_ = obj.size_;
-        capacity_ = obj.capacity_;
-
-        data_ = new TYPE[capacity_]{};
-
-        for (size_t i = 0; i < capacity_; ++i)
-            data_[i] = obj.data_[i];
-
-        return *this;
-    }
-
-    Stack& operator = (Stack&& obj)
-    {
-        size_ = obj.size_;
-        capacity_ = obj.capacity_;
-
-        delete[] data_;
-        data_ = obj.data_;
-        obj.data_ = nullptr;
- 
-        return *this;
-    }
-
-    ~Stack ()
-    {
-        size_ = 0;
-
-        if (data_ != nullptr) delete[] data_;
-        data_ = nullptr;
-
-        capacity_ = 0;
-    }
-
-    void push (TYPE value)
-    {
-        if (size_ == capacity_ - 1)
-            expand();
-
-        data_[size_++] = value;
-    }
-
-    void pop ()
-    {
-        --size_;
-    }
-
-    TYPE& top ()
-    {
-        return data_[size_ - 1];
-    }
-
-    const TYPE& top () const
-    {
-        return data_[size_ - 1];
-    }
-
-    size_t size () const
-    {
-        return size_;
-    }
-
-    bool empty () const
-    {
-        return size_ == 0;
-    }
-
-    void clean ()
-    {
-        delete[] data_;
-
-        size_ = 0;
-        capacity_ = DEFAULT_STACK_CAPACITY;
-
-        data_ = new TYPE[capacity_] {};
-    }
+    void   push  (int value);
+    void   pop   ();
+    int&   top   ();
+    int    top   () const;
+    bool   empty () const;
+    size_t size  () const;
+    void   clean ();
 
 private:
 
-    void expand ()
-    {
-        capacity_ *= 2;
-
-        TYPE* temp = new TYPE[capacity_] {};
-
-        for (size_t i = 0; i < capacity_ / 2; ++i)
-            temp[i] = data_[i];
-
-        delete[] data_;
-        data_ = temp;
-    }
+    void expand ();
 };
 
 #endif // STACK_STACK_H_INCLUDED
