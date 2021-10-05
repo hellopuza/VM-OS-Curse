@@ -40,12 +40,15 @@ Stack::Stack (Stack&& obj) :
 
 Stack& Stack::operator = (const Stack& obj)
 {
+    if (this == &obj)
+        return *this;
+
     delete[] data_;
 
     size_ = obj.size_;
     capacity_ = obj.capacity_;
 
-    data_ = new int[capacity_]{};
+    data_ = new int[capacity_] {};
 
     for (size_t i = 0; i < capacity_; ++i)
         data_[i] = obj.data_[i];
@@ -55,6 +58,9 @@ Stack& Stack::operator = (const Stack& obj)
 
 Stack& Stack::operator = (Stack&& obj)
 {
+    if (this == &obj)
+        return *this;
+
     size_ = obj.size_;
     capacity_ = obj.capacity_;
 
@@ -67,12 +73,8 @@ Stack& Stack::operator = (Stack&& obj)
 
 Stack::~Stack ()
 {
-    if (data_ != nullptr)
-        delete[] data_;
-
+    delete[] data_;
     data_ = nullptr;
-    capacity_ = 0;
-    size_ = 0;
 }
 
 void Stack::push (int value)
