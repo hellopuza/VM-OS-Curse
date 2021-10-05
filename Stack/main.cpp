@@ -108,20 +108,20 @@ void test_pop_size (int value)
     printf("test pop-size \t\t\t%s\n", test ? "SUCCESSFUL" : "FAILED");
 }
 
-void test_clean_size (int value)
+void test_clear_size (int value)
 {
     puza::Stack stk;
     stk.push(value);
     stk.push(value);
-    stk.clean();
-    printf("test clean-size \t\t%s\n", stk.size() == 0 ? "SUCCESSFUL" : "FAILED");
+    stk.clear();
+    printf("test clear-size \t\t%s\n", stk.size() == 0 ? "SUCCESSFUL" : "FAILED");
 }
 
-void test_after_clean (int value1, int value2)
+void test_after_clear (int value1, int value2)
 {
     puza::Stack stk;
     stk.push(value1);
-    stk.clean();
+    stk.clear();
     stk.push(value1);
     stk.push(value2);
     bool test = (stk.size() == 2);
@@ -129,7 +129,7 @@ void test_after_clean (int value1, int value2)
     stk.pop();
     test = test && (value1 == stk.top());
     test = test && (stk.size() == 1);
-    printf("test after-clean \t\t%s\n", test ? "SUCCESSFUL" : "FAILED");
+    printf("test after-clear \t\t%s\n", test ? "SUCCESSFUL" : "FAILED");
 }
 
 void test_big_size (int value1, int value2, int value3)
@@ -187,8 +187,8 @@ int main()
     test_start_size();
     test_push_size(1);
     test_pop_size(11);
-    test_clean_size(1);
-    test_after_clean(1, 2);
+    test_clear_size(1);
+    test_after_clear(1, 2);
     test_big_size(1, 2, 3);
     test_assignment(1, 2);
     test_copy_constructor(1, 2);

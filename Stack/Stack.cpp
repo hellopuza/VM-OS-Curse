@@ -142,7 +142,7 @@ bool Stack::empty () const
     return size_ == 0;
 }
 
-void Stack::clean ()
+void Stack::clear ()
 {
     delete[] data_;
 

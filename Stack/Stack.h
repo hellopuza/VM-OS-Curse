@@ -42,7 +42,7 @@ public:
 
     bool   empty () const;
     size_t size  () const;
-    void   clean ();
+    void   clear ();
 
 private:
 
