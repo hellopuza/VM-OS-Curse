@@ -5,35 +5,37 @@
     * Author:      Artem Puzankov                                              *
     * Email:       puzankov.ao@phystech.edu                                    *
     * GitHub:      https://github.com/hellopuza                                *
+    * MIT License                                                              *
     * Copyright © 2021 Artem Puzankov. All rights reserved.                    *
     *///------------------------------------------------------------------------
 
 #include "Stack.h"
-#include <new>
 
-constexpr size_t DEFAULT_STACK_CAPACITY = 8;
+namespace puza {
 
 Stack::Stack () :
-    size_(0),
-    capacity_(DEFAULT_STACK_CAPACITY)
+    size_(0), capacity_(DEFAULT_CAPACITY)
 {
-    data_ = new int[capacity_] {};
+    data_ = new int[capacity_];
 }
 
-Stack::Stack (const Stack& obj) :
-    size_    (obj.size_),
-    capacity_(obj.capacity_)
-{
-    data_ = new int[capacity_] {};
+Stack::Stack (size_t size, int* data) :
+    size_(size), capacity_(size  + DEFAULT_CAPACITY), data_(data)
+{}
 
-    for (size_t i = 0; i < capacity_; ++i)
+Stack::Stack (const Stack& obj) :
+    size_(obj.size_), capacity_(obj.capacity_)
+{
+    data_ = new int[capacity_];
+
+    for (size_t i = 0; i < size_; ++i)
+    {
         data_[i] = obj.data_[i];
+    }
 }
 
 Stack::Stack (Stack&& obj) :
-    size_    (obj.size_),
-    capacity_(obj.capacity_),
-    data_    (obj.data_)
+    size_(obj.size_), capacity_(obj.capacity_), data_(obj.data_)
 {
     obj.data_ = nullptr;
 }
@@ -41,17 +43,21 @@ Stack::Stack (Stack&& obj) :
 Stack& Stack::operator = (const Stack& obj)
 {
     if (this == &obj)
+    {
         return *this;
+    }
 
     delete[] data_;
 
     size_ = obj.size_;
     capacity_ = obj.capacity_;
 
-    data_ = new int[capacity_] {};
+    data_ = new int[capacity_];
 
-    for (size_t i = 0; i < capacity_; ++i)
+    for (size_t i = 0; i < size_; ++i)
+    {
         data_[i] = obj.data_[i];
+    }
 
     return *this;
 }
@@ -59,7 +65,9 @@ Stack& Stack::operator = (const Stack& obj)
 Stack& Stack::operator = (Stack&& obj)
 {
     if (this == &obj)
+    {
         return *this;
+    }
 
     size_ = obj.size_;
     capacity_ = obj.capacity_;
@@ -71,6 +79,28 @@ Stack& Stack::operator = (Stack&& obj)
     return *this;
 }
 
+bool Stack::operator == (const Stack& obj) const
+{
+    if (size_ != obj.size_)
+    {
+        return false;
+    }
+
+    for (size_t i = 0; i < size_; ++i)
+    {
+        if (data_[i] != obj.data_[i])
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool Stack::operator != (const Stack& obj) const
+{
+    return !(*this == obj);
+}
+
 Stack::~Stack ()
 {
     delete[] data_;
@@ -80,7 +110,9 @@ Stack::~Stack ()
 void Stack::push (int value)
 {
     if (size_ == capacity_ - 1)
+    {
         expand();
+    }
 
     data_[size_++] = value;
 }
@@ -95,7 +127,7 @@ int& Stack::top ()
     return data_[size_ - 1];
 }
 
-int Stack::top () const
+const int& Stack::top () const
 {
     return data_[size_ - 1];
 }
@@ -115,20 +147,22 @@ void Stack::clean ()
     delete[] data_;
 
     size_ = 0;
-    capacity_ = DEFAULT_STACK_CAPACITY;
+    capacity_ = DEFAULT_CAPACITY;
 
-    data_ = new int[capacity_] {};
+    data_ = new int[capacity_];
 }
 
 void Stack::expand ()
 {
     capacity_ *= 2;
 
-    int* temp = new int[capacity_] {};
+    int* temp = new int[capacity_];
 
-    for (size_t i = 0; i < capacity_ / 2; ++i)
+    for (size_t i = 0; i < size_; ++i)
         temp[i] = data_[i];
 
     delete[] data_;
     data_ = temp;
 }
+
+} // namespace puza

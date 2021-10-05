@@ -1,9 +1,11 @@
 /*------------------------------------------------------------------------------
     * File:        main.cpp                                                    *
     * Description: Program uses stack                                          *
+    * Created:     24 sep 2021                                                 *
     * Author:      Artem Puzankov                                              *
     * Email:       puzankov.ao@phystech.edu                                    *
     * GitHub:      https://github.com/hellopuza                                *
+    * MIT License                                                              *
     * Copyright © 2021 Artem Puzankov. All rights reserved.                    *
     *///------------------------------------------------------------------------
 
@@ -12,7 +14,7 @@
 
 void test_push_top (int value1, int value2)
 {
-    Stack stk;
+    puza::Stack stk;
     stk.push(value1);
     stk.push(value2);
     printf("test push-top \t\t\t%s\n", value2 == stk.top() ? "SUCCESSFUL" : "FAILED");
@@ -20,7 +22,7 @@ void test_push_top (int value1, int value2)
 
 void test_push_pop (int value1, int value2)
 {
-    Stack stk;
+    puza::Stack stk;
     stk.push(value1);
     stk.push(value2);
 
@@ -30,16 +32,56 @@ void test_push_pop (int value1, int value2)
     printf("test push-pop \t\t\t%s\n", (value2 == test_value1) && (value1 == test_value2) ? "SUCCESSFUL" : "FAILED");
 }
 
+void test_operator_equal (int value1, int value2)
+{
+    puza::Stack stk1;
+    stk1.push(value1);
+    stk1.push(value2);
+
+    puza::Stack stk2;
+    stk2.push(value1);
+    stk2.push(value2);
+
+    puza::Stack stk3;
+    stk3.push(value1);
+
+    puza::Stack stk4;
+    stk4.push(value1);
+    stk4.push(value2);
+
+    printf("test operator-equal \t\t%s\n", (stk1 == stk2) && !(stk3 == stk4) ? "SUCCESSFUL" : "FAILED");
+}
+
+void test_operator_not_equal (int value1, int value2)
+{
+    puza::Stack stk1;
+    stk1.push(value1);
+    stk1.push(value1);
+
+    puza::Stack stk2;
+    stk2.push(value1);
+    stk2.push(value2);
+
+    puza::Stack stk3;
+    stk3.push(value2);
+
+    puza::Stack stk4;
+    stk4.push(value1);
+    stk4.push(value2);
+
+    printf("test operator-not-equal \t%s\n", (stk1 != stk2) && (stk3 != stk4) ? "SUCCESSFUL" : "FAILED");
+}
+
 void test_start_size ()
 {
-    Stack stk;
+    puza::Stack stk;
     bool test = (stk.size() == 0);
     printf("test start-size \t\t%s\n", stk.size() == 0 ? "SUCCESSFUL" : "FAILED");
 }
 
 void test_push_size (int value)
 {
-    Stack stk;
+    puza::Stack stk;
     bool test = (stk.size() == 0);
 
     stk.push(value);
@@ -52,7 +94,7 @@ void test_push_size (int value)
 
 void test_pop_size (int value)
 {
-    Stack stk;
+    puza::Stack stk;
     bool test = (stk.size() == 0);
 
     stk.push(value);
@@ -68,7 +110,7 @@ void test_pop_size (int value)
 
 void test_clean_size (int value)
 {
-    Stack stk;
+    puza::Stack stk;
     stk.push(value);
     stk.push(value);
     stk.clean();
@@ -77,7 +119,7 @@ void test_clean_size (int value)
 
 void test_after_clean (int value1, int value2)
 {
-    Stack stk;
+    puza::Stack stk;
     stk.push(value1);
     stk.clean();
     stk.push(value1);
@@ -92,7 +134,7 @@ void test_after_clean (int value1, int value2)
 
 void test_big_size (int value1, int value2, int value3)
 {
-    Stack stk;
+    puza::Stack stk;
     size_t test_size = 0;
     bool test = true;
     for (int i = 0; i < 10; i++)
@@ -111,10 +153,10 @@ void test_big_size (int value1, int value2, int value3)
 
 void test_assignment (int value1, int value2)
 {
-    Stack stk1;
+    puza::Stack stk1;
     stk1.push(value1);
     stk1.push(value2);
-    Stack stk2;
+    puza::Stack stk2;
     stk2 = stk1;
 
     int test_value1 = stk2.top();
@@ -125,10 +167,10 @@ void test_assignment (int value1, int value2)
 
 void test_copy_constructor (int value1, int value2)
 {
-    Stack stk1;
+    puza::Stack stk1;
     stk1.push(value1);
     stk1.push(value2);
-    Stack stk2(stk1);
+    puza::Stack stk2(stk1);
 
     int test_value1 = stk2.top();
     stk2.pop();
@@ -140,6 +182,8 @@ int main()
 {
     test_push_top(1, 2);
     test_push_pop(3, 4);
+    test_operator_equal(1, 2);
+    test_operator_not_equal(1, 2);
     test_start_size();
     test_push_size(1);
     test_pop_size(11);
@@ -151,4 +195,3 @@ int main()
 
     return 0;
 }
-
