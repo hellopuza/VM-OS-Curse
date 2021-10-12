@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-    * File:        Stack.cpp                                                   *
+    * File:        Stack-impl.h                                                *
     * Description: Stack functions implementation.                             *
     * Created:     24 sep 2021                                                 *
     * Author:      Artem Puzankov                                              *
