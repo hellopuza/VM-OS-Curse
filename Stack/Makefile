@@ -2,7 +2,7 @@
 
 CC = g++
 CFLAGS = -c -O3
-SOURCES = main.cpp Stack.cpp
+SOURCES = main.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 EXECUTABLE = Stack
 

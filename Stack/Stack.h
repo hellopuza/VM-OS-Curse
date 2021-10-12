@@ -16,12 +16,13 @@
 
 namespace puza {
 
+template <typename T>
 class Stack
 {
 public:
 
     Stack ();
-    Stack (size_t size, int* data);
+    Stack (size_t size, T* data);
     ~Stack ();
 
 
@@ -34,11 +35,11 @@ public:
     bool operator == (const Stack& obj) const;
     bool operator != (const Stack& obj) const;
 
-    void push (int value);
+    void push (T value);
     void pop  ();
 
-    const int& top () const;
-    int& top ();
+    const T& top () const;
+    T& top ();
 
     bool   empty () const;
     size_t size  () const;
@@ -48,7 +49,7 @@ private:
 
     size_t size_;
     size_t capacity_;
-    int*   data_;
+    T*   data_;
 
     static const size_t DEFAULT_CAPACITY = 8;
 
