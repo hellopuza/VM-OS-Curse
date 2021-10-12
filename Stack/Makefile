@@ -6,7 +6,7 @@ SOURCES = main.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 EXECUTABLE = Stack
 
-all: $(SOURCES) $(EXECUTABLE) clean
+all: $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(OBJECTS) $(LIBS) -o $@
@@ -15,6 +15,6 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(CFLAGS) $< -o $@
 
 clean:
-	rm $(OBJECTS)
+	rm $(OBJECTS) $(EXECUTABLE)
 
 
