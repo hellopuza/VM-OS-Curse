@@ -9,8 +9,11 @@
     * Copyright © 2021 Artem Puzankov. All rights reserved.                    *
     *///------------------------------------------------------------------------
 
-#include "Stack-impl.h"
 #include <iostream>
+#include <typeinfo>
+#include "Stack/Stack-impl.h"
+
+#define STATUS(cond) ((cond) ? "SUCCESSFUL" : "FAILED")
 
 template <typename T>
 void test_push_top (T value1, T value2)
@@ -18,7 +21,8 @@ void test_push_top (T value1, T value2)
     puza::Stack<T> stk;
     stk.push(value1);
     stk.push(value2);
-    printf("test push-top \t\t\t%s\n", value2 == stk.top() ? "SUCCESSFUL" : "FAILED");
+    std::cout << "test " << typeid(T).name() << " push-top \t\t";
+    std::cout << STATUS(value2 == stk.top()) << "\n";
 }
 
 template <typename T>
@@ -31,7 +35,8 @@ void test_push_pop (T value1, T value2)
     T test_value1 = stk.top();
     stk.pop();
     T test_value2 = stk.top();
-    printf("test push-pop \t\t\t%s\n", (value2 == test_value1) && (value1 == test_value2) ? "SUCCESSFUL" : "FAILED");
+    std::cout << "test " << typeid(T).name() << " push-pop \t\t";
+    std::cout << STATUS((value2 == test_value1) && (value1 == test_value2)) << "\n";
 }
 
 template <typename T>
@@ -52,7 +57,8 @@ void test_operator_equal (T value1, T value2)
     stk4.push(value1);
     stk4.push(value2);
 
-    printf("test operator-equal \t\t%s\n", (stk1 == stk2) && !(stk3 == stk4) ? "SUCCESSFUL" : "FAILED");
+    std::cout << "test " << typeid(T).name() << " operator-equal \t\t";
+    std::cout << STATUS((stk1 == stk2) && !(stk3 == stk4)) << "\n";
 }
 
 template <typename T>
@@ -73,15 +79,16 @@ void test_operator_not_equal (T value1, T value2)
     stk4.push(value1);
     stk4.push(value2);
 
-    printf("test operator-not-equal \t%s\n", (stk1 != stk2) && (stk3 != stk4) ? "SUCCESSFUL" : "FAILED");
+    std::cout << "test " << typeid(T).name() << " operator-not-equal \t";
+    std::cout << STATUS((stk1 != stk2) && (stk3 != stk4)) << "\n";
 }
 
 template <typename T>
 void test_start_size (T value)
 {
     puza::Stack<T>stk;
-    bool test = (stk.size() == 0);
-    printf("test start-size \t\t%s\n", stk.size() == 0 ? "SUCCESSFUL" : "FAILED");
+    std::cout << "test " << typeid(T).name() << " start-size \t\t";
+    std::cout << STATUS(stk.size() == 0) << "\n";
 }
 
 template <typename T>
@@ -95,7 +102,8 @@ void test_push_size (T value)
     stk.push(value);
     test = test && (stk.size() == 2);
 
-    printf("test push-size \t\t\t%s\n", test ? "SUCCESSFUL" : "FAILED");
+    std::cout << "test " << typeid(T).name() << " push-size \t\t";
+    std::cout << STATUS(test) << "\n";
 }
 
 template <typename T>
@@ -112,7 +120,8 @@ void test_pop_size (T value)
     stk.pop();
     test = test && (stk.size() == 0);
 
-    printf("test pop-size \t\t\t%s\n", test ? "SUCCESSFUL" : "FAILED");
+    std::cout << "test " << typeid(T).name() << " pop-size \t\t";
+    std::cout << STATUS(test) << "\n";
 }
 
 template <typename T>
@@ -122,7 +131,8 @@ void test_clear_size (T value)
     stk.push(value);
     stk.push(value);
     stk.clear();
-    printf("test clear-size \t\t%s\n", stk.size() == 0 ? "SUCCESSFUL" : "FAILED");
+    std::cout << "test " << typeid(T).name() << " clear-size \t\t";
+    std::cout << STATUS(stk.size() == 0) << "\n";
 }
 
 template <typename T>
@@ -138,7 +148,8 @@ void test_after_clear (T value1, T value2)
     stk.pop();
     test = test && (value1 == stk.top());
     test = test && (stk.size() == 1);
-    printf("test after-clear \t\t%s\n", test ? "SUCCESSFUL" : "FAILED");
+    std::cout << "test " << typeid(T).name() << " after-clear \t\t";
+    std::cout << STATUS(test) << "\n";
 }
 
 template <typename T>
@@ -147,7 +158,7 @@ void test_big_size (T value1, T value2, T value3)
     puza::Stack<T>stk;
     size_t test_size = 0;
     bool test = true;
-    for (T i = 0; i < 10; i++)
+    for (size_t i = 0; i < 1000000; i++)
     {
         stk.push(value1);
         stk.push(value2);
@@ -158,7 +169,8 @@ void test_big_size (T value1, T value2, T value3)
         test = test && (value3 == stk.top());
         test_size += 3;
     }
-    printf("test big-size \t\t\t%s\n", test && (test_size == stk.size()) ? "SUCCESSFUL" : "FAILED");
+    std::cout << "test " << typeid(T).name() << " big-size \t\t";
+    std::cout << STATUS(test && (test_size == stk.size())) << "\n";
 }
 
 template <typename T>
@@ -173,7 +185,8 @@ void test_assignment (T value1, T value2)
     T test_value1 = stk2.top();
     stk2.pop();
     T test_value2 = stk2.top();
-    printf("test assignment \t\t%s\n", (value2 == test_value1) && (value1 == test_value2) ? "SUCCESSFUL" : "FAILED");
+    std::cout << "test " << typeid(T).name() << " assignment \t\t";
+    std::cout << STATUS((value2 == test_value1) && (value1 == test_value2)) << "\n";
 }
 
 template <typename T>
@@ -187,23 +200,24 @@ void test_copy_constructor (T value1, T value2)
     T test_value1 = stk2.top();
     stk2.pop();
     T test_value2 = stk2.top();
-    printf("test copy-constructor \t\t%s\n", (value2 == test_value1) && (value1 == test_value2) ? "SUCCESSFUL" : "FAILED");
+    std::cout << "test " << typeid(T).name() << " copy-constructor \t";
+    std::cout << STATUS((value2 == test_value1) && (value1 == test_value2)) << "\n";
 }
 
 int main()
 {
-    test_push_top(1, 2);
-    test_push_pop(3u, 4u);
-    test_operator_equal(1, 2);
-    test_operator_not_equal(1.0, 2.0);
-    test_start_size(1);
-    test_push_size(1.0f);
-    test_pop_size(1);
-    test_clear_size(1);
-    test_after_clear(1u, 2u);
-    test_big_size(1.0, 2.0, 3.0);
-    test_assignment(1, 2);
-    test_copy_constructor(1, 2);
+    test_push_top(true, false);
+    test_push_pop(true, false);
+    test_operator_equal(false, true);
+    test_operator_not_equal(true, false);
+    test_start_size(true);
+    test_push_size(false);
+    test_pop_size(true);
+    test_clear_size(true);
+    test_after_clear(true, false);
+    test_big_size(true, false, true);
+    test_assignment(false, true);
+    test_copy_constructor(true, false);
 
     return 0;
 }
