@@ -1,14 +1,3 @@
-/*------------------------------------------------------------------------------
-    * File:        Stack.h                                                     *
-    * Description: Stack library.                                              *
-    * Created:     24 sep 2021                                                 *
-    * Author:      Artem Puzankov                                              *
-    * Email:       puzankov.ao@phystech.edu                                    *
-    * GitHub:      https://github.com/hellopuza                                *
-    * MIT License                                                              *
-    * Copyright © 2021 Artem Puzankov. All rights reserved.                    *
-    *///------------------------------------------------------------------------
-
 #ifndef STACK_STACK_H_INCLUDED
 #define STACK_STACK_H_INCLUDED
 

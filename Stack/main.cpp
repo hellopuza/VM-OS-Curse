@@ -1,14 +1,3 @@
-/*------------------------------------------------------------------------------
-    * File:        main.cpp                                                    *
-    * Description: Program uses Stack<T>                                         *
-    * Created:     24 sep 2021                                                 *
-    * Author:      Artem Puzankov                                              *
-    * Email:       puzankov.ao@phystech.edu                                    *
-    * GitHub:      https://github.com/hellopuza                                *
-    * MIT License                                                              *
-    * Copyright © 2021 Artem Puzankov. All rights reserved.                    *
-    *///------------------------------------------------------------------------
-
 #include <iostream>
 #include <typeinfo>
 #include "Stack/Stack-impl.h"
