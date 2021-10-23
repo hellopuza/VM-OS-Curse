@@ -1,6 +1,6 @@
 #include <iostream>
 #include <typeinfo>
-#include "Stack/Stack-impl.h"
+#include "Stack-impl.h"
 
 #define STATUS(cond) ((cond) ? "SUCCESSFUL" : "FAILED")
 
