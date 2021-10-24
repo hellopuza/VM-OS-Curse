@@ -1,16 +1,15 @@
-#include <utility>
 #include "Stack.h"
+
+#include <utility>
 
 namespace puza {
 
-Stack<bool>::Stack () :
-    size_(0), capacity_(DEFAULT_CAPACITY)
+Stack<bool>::Stack () : size_ (0), capacity_ (DEFAULT_CAPACITY)
 {
     data_ = new char[capacity_ / 8 + 1];
 }
 
-Stack<bool>::Stack (size_t size, bool* data) :
-    size_(size), capacity_(size)
+Stack<bool>::Stack (size_t size, bool *data) : size_ (size), capacity_ (size)
 {
     data_ = new char[capacity_ / 8 + 1];
     for (size_t i = 0; i < size_; i++)
@@ -25,23 +24,18 @@ Stack<bool>::~Stack ()
     delete[] data_;
 }
 
-Stack<bool>::Stack (const Stack& obj) :
-    size_(obj.size_), capacity_(obj.capacity_)
+Stack<bool>::Stack (const Stack &obj) : size_ (obj.size_), capacity_ (obj.capacity_)
 {
     data_ = new char[capacity_ / 8 + 1];
-    for (size_t i = 0; i <= size_ / 8; i++)
-    {
-        data_[i] = obj.data_[i];
-    }
+    for (size_t i = 0; i <= size_ / 8; i++) { data_[i] = obj.data_[i]; }
 }
 
-Stack<bool>::Stack (Stack&& obj) :
-    size_(obj.size_), capacity_(obj.capacity_), data_(obj.data_)
+Stack<bool>::Stack (Stack &&obj) : size_ (obj.size_), capacity_ (obj.capacity_), data_ (obj.data_)
 {
     obj.data_ = nullptr;
 }
 
-Stack<bool>& Stack<bool>::operator = (const Stack& obj)
+Stack<bool> &Stack<bool>::operator= (const Stack &obj)
 {
     if (this == &obj)
     {
@@ -54,15 +48,12 @@ Stack<bool>& Stack<bool>::operator = (const Stack& obj)
     capacity_ = obj.capacity_;
 
     data_ = new char[capacity_ / 8 + 1];
-    for (size_t i = 0; i <= size_ / 8; i++)
-    {
-        data_[i] = obj.data_[i];
-    }
+    for (size_t i = 0; i <= size_ / 8; i++) { data_[i] = obj.data_[i]; }
 
     return *this;
 }
 
-Stack<bool>& Stack<bool>::operator = (Stack&& obj)
+Stack<bool> &Stack<bool>::operator= (Stack &&obj)
 {
     if (this == &obj)
     {
@@ -75,11 +66,11 @@ Stack<bool>& Stack<bool>::operator = (Stack&& obj)
     delete[] data_;
     data_ = obj.data_;
     obj.data_ = nullptr;
- 
+
     return *this;
 }
 
-bool Stack<bool>::operator == (const Stack& obj) const
+bool Stack<bool>::operator== (const Stack &obj) const
 {
     if (size_ != obj.size_)
     {
@@ -96,7 +87,7 @@ bool Stack<bool>::operator == (const Stack& obj) const
     return true;
 }
 
-bool Stack<bool>::operator != (const Stack& obj) const
+bool Stack<bool>::operator!= (const Stack &obj) const
 {
     return !(*this == obj);
 }
@@ -105,7 +96,7 @@ void Stack<bool>::push (bool value)
 {
     if (size_ == capacity_)
     {
-        expand();
+        expand ();
     }
 
     data_[size_ / 8] &= ~(1 << (size_ % 8));
@@ -123,11 +114,11 @@ void Stack<bool>::pop ()
     --size_;
 }
 
-void Stack<bool>::swap (Stack* obj)
+void Stack<bool>::swap (Stack *obj)
 {
-    Stack<bool> temp = std::move(*this);
-    *this = std::move(*obj);
-    *obj = std::move(temp);
+    Stack<bool> temp = std::move (*this);
+    *this = std::move (*obj);
+    *obj = std::move (temp);
 }
 
 size_t Stack<bool>::size () const
@@ -152,12 +143,9 @@ void Stack<bool>::clear ()
 void Stack<bool>::expand ()
 {
     capacity_ *= 2;
-    char* temp = new char[capacity_ / 8 + 1];
+    char *temp = new char[capacity_ / 8 + 1];
 
-    for (size_t i = 0; i <= size_ / 8; i++)
-    {
-        temp[i] = data_[i];
-    }
+    for (size_t i = 0; i <= size_ / 8; i++) { temp[i] = data_[i]; }
 
     delete[] data_;
     data_ = temp;

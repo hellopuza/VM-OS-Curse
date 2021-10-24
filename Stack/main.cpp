@@ -73,7 +73,7 @@ void test_operator_not_equal (T value1, T value2)
 }
 
 template <typename T>
-void test_start_size (T value)
+void test_start_size ()
 {
     puza::Stack<T>stk;
     std::cout << "test " << typeid(T).name() << " start-size \t\t";
@@ -199,7 +199,7 @@ int main()
     test_push_pop(true, false);
     test_operator_equal(false, true);
     test_operator_not_equal(true, false);
-    test_start_size(true);
+    test_start_size<bool>();
     test_push_size(false);
     test_pop_size(true);
     test_clear_size(true);

@@ -5,28 +5,27 @@
 
 namespace puza {
 
-template <typename T>
+template<typename T>
 class Stack
 {
 public:
-
     Stack ();
-    Stack (size_t size, T* data);
-    Stack (const Stack& obj);
-    Stack (Stack&& obj);
+    Stack (size_t size, T *data);
+    Stack (const Stack &obj);
+    Stack (Stack &&obj);
     ~Stack ();
 
-    Stack& operator = (const Stack& obj);
-    Stack& operator = (Stack&& obj);
-    bool operator == (const Stack& obj) const;
-    bool operator != (const Stack& obj) const;
+    Stack &operator= (const Stack &obj);
+    Stack &operator= (Stack &&obj);
+    bool operator== (const Stack &obj) const;
+    bool operator!= (const Stack &obj) const;
 
-    void push (const T& value);
+    void push (const T &value);
     void pop ();
-    const T& top () const;
-    T& top ();
-    
-    void swap (Stack* obj);
+    const T &top () const;
+    T &top ();
+
+    void swap (Stack *obj);
     bool empty () const;
     size_t size () const;
     void clear ();
@@ -34,35 +33,33 @@ public:
     const size_t DEFAULT_CAPACITY = 16;
 
 private:
-
     size_t size_;
     size_t capacity_;
-    T* data_;
+    T *data_;
 
     void expand ();
 };
 
-template <>
+template<>
 class Stack<bool>
 {
 public:
-
     Stack ();
-    Stack (size_t size, bool* data);
-    Stack (const Stack& obj);
-    Stack (Stack&& obj);
+    Stack (size_t size, bool *data);
+    Stack (const Stack &obj);
+    Stack (Stack &&obj);
     ~Stack ();
 
-    Stack& operator = (const Stack& obj);
-    Stack& operator = (Stack&& obj);
-    bool operator == (const Stack& obj) const;
-    bool operator != (const Stack& obj) const;
+    Stack &operator= (const Stack &obj);
+    Stack &operator= (Stack &&obj);
+    bool operator== (const Stack &obj) const;
+    bool operator!= (const Stack &obj) const;
 
     void push (bool value);
     void pop ();
     bool top () const;
 
-    void swap (Stack* obj);
+    void swap (Stack *obj);
     bool empty () const;
     size_t size () const;
     void clear ();
@@ -70,10 +67,9 @@ public:
     const size_t DEFAULT_CAPACITY = 16;
 
 private:
-
     size_t size_;
     size_t capacity_;
-    char* data_;
+    char *data_;
 
     void expand ();
 };
