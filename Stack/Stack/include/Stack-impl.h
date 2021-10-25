@@ -1,5 +1,5 @@
-#ifndef STACK_STACK_IMPL_H_INCLUDED
-#define STACK_STACK_IMPL_H_INCLUDED
+#ifndef STACK_IMPL_H
+#define STACK_IMPL_H
 
 #include "Stack.h"
 
@@ -171,6 +171,6 @@ void Stack<T>::expand ()
     data_ = temp;
 }
 
-#endif // STACK_STACK_IMPL_H_INCLUDED
-
 } // namespace puza
+
+#endif // STACK_IMPL_H

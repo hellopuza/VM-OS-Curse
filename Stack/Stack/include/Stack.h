@@ -1,5 +1,5 @@
-#ifndef STACK_STACK_H_INCLUDED
-#define STACK_STACK_H_INCLUDED
+#ifndef STACK_H
+#define STACK_H
 
 #include <cstdlib>
 
@@ -76,4 +76,4 @@ private:
 
 } // namespace puza
 
-#endif // STACK_STACK_H_INCLUDED
+#endif // STACK_H
