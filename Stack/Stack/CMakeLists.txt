@@ -12,6 +12,11 @@ set_target_properties(stack PROPERTIES
     CXX_STANDARD_REQUIRED ON
 )
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra -Wpedantic -Wcast-qual -Wcast-align -Wconversion \
+    -Wsign-promo -Wfloat-equal -Wenum-compare -Wold-style-cast -Wredundant-decls -Wsign-conversion -Wnon-virtual-dtor \
+    -Wctor-dtor-privacy -Woverloaded-virtual \
+")
+
 find_program(CLANG_FORMAT "clang-format")
 if(CLANG_FORMAT)
     file(GLOB_RECURSE ALL_CXX_SOURCE_FILES ${STACK_SOURCES} ${STACK_HEADERS})
@@ -28,7 +33,7 @@ endif()
 find_program(CLANG_TIDY "clang-tidy")
 if(CLANG_TIDY)
     file(GLOB_RECURSE ALL_CXX_SOURCE_FILES ${STACK_SOURCES} ${STACK_HEADERS})
-
+    
     add_custom_target(
         tidy
         COMMAND clang-tidy
@@ -39,8 +44,3 @@ if(CLANG_TIDY)
         -I${PROJECT_ROOT_DIR}/include
     )
 endif()
-
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra -Wpedantic -Wcast-qual -Wcast-align -Wconversion \
-    -Wsign-promo -Wfloat-equal -Wenum-compare -Wold-style-cast -Wredundant-decls -Wsign-conversion -Wnon-virtual-dtor \
-    -Wctor-dtor-privacy -Woverloaded-virtual \
-")

@@ -12,7 +12,9 @@ FetchContent_MakeAvailable(gtest)
 
 enable_testing()
 
-add_executable(stack_test main.cpp test.cpp)
+set(STACK_TEST_SOURCES main.cpp test.cpp)
+
+add_executable(stack_test ${STACK_TEST_SOURCES})
 target_link_libraries(stack_test gtest_main stack)
 
 include(GoogleTest)
