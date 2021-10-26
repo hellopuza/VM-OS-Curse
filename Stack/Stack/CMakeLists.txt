@@ -14,8 +14,8 @@ set_target_properties(stack PROPERTIES
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra -Wpedantic -Wcast-qual -Wcast-align -Wconversion \
     -Wsign-promo -Wfloat-equal -Wenum-compare -Wold-style-cast -Wredundant-decls -Wsign-conversion -Wnon-virtual-dtor \
-    -Wctor-dtor-privacy -Woverloaded-virtual \
-")
+    -Wctor-dtor-privacy -Woverloaded-virtual"
+)
 
 find_program(CLANG_FORMAT "clang-format")
 if(CLANG_FORMAT)
