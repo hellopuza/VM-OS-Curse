@@ -13,9 +13,14 @@ FetchContent_MakeAvailable(gtest)
 enable_testing()
 
 set(STACK_TEST_SOURCES main.cpp)
+set(EXEC_NAME stack_test)
 
-add_executable(stack_test ${STACK_TEST_SOURCES})
-target_link_libraries(stack_test gtest_main stack)
+add_executable(${EXEC_NAME} ${STACK_TEST_SOURCES})
+target_link_libraries(${EXEC_NAME} gtest_main stack)
+
+add_custom_target(run_${EXEC_NAME}
+                  COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${EXEC_NAME})
+add_dependencies(run_${EXEC_NAME} ${EXEC_NAME})
 
 include(GoogleTest)
 gtest_discover_tests(stack_test PROPERTIES LABELS "unit")
