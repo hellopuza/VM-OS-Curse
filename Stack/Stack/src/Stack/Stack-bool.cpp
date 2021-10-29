@@ -15,7 +15,7 @@ Stack<bool>::Stack (size_t size, const bool *data) : size_ (size), capacity_ (si
     for (size_t i = 0; i < size_; i++)
     {
         data_[i / 8] &= static_cast<char> (~(1 << (i % 8)));
-        data_[i / 8] ^= static_cast<char> (static_cast<char>(data[i]) << (i % 8));
+        data_[i / 8] ^= static_cast<char> (static_cast<char> (data[i]) << (i % 8));
     }
 }
 
@@ -100,13 +100,13 @@ void Stack<bool>::push (bool value)
     }
 
     data_[size_ / 8] &= static_cast<char> (~(1 << (size_ % 8)));
-    data_[size_ / 8] ^= static_cast<char> ( static_cast<char>(value) << (size_ % 8));
+    data_[size_ / 8] ^= static_cast<char> (static_cast<char> (value) << (size_ % 8));
     size_++;
 }
 
 bool Stack<bool>::top () const
 {
-    return static_cast<bool>(data_[(size_ - 1) / 8] & (1 << ((size_ - 1) % 8)));
+    return static_cast<bool> (data_[(size_ - 1) / 8] & (1 << ((size_ - 1) % 8)));
 }
 
 void Stack<bool>::pop ()
