@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "Stack-impl.h"
+#include "Stack/Stack-impl.h"
 
 template <typename T>
 class StackTest : public testing::Test
@@ -10,16 +10,16 @@ protected:
     puza::Stack<T> stk_[2];
     T val1_ = static_cast<T>(0);
     T val2_ = static_cast<T>(1);
-    const size_t MAX_ITER = 1000000;
+    const size_t MAX_ITER_ = 1000000;
 };
 
-typedef testing::Types<double, float, int, short, char, bool> MyTypes;
+typedef testing::Types<double, float, int, char, bool> MyTypes;
 
-TYPED_TEST_SUITE(StackTest, MyTypes);
+TYPED_TEST_SUITE(StackTest, MyTypes, );
 
-TYPED_TEST(StackTest, push_top)
+TYPED_TEST(StackTest, PushTop)
 {
-    for (size_t i = 0; i < this->MAX_ITER; i++)
+    for (size_t i = 0; i < this->MAX_ITER_; i++)
     {
         this->stk_[0].push(this->val1_);
         this->stk_[0].push(this->val2_);
@@ -27,10 +27,10 @@ TYPED_TEST(StackTest, push_top)
     }
 }
 
-TYPED_TEST(StackTest, push_pop)
+TYPED_TEST(StackTest, PushPop)
 {
     using T = typename TestFixture::MyType;
-    for (size_t i = 0; i < this->MAX_ITER; i++)
+    for (size_t i = 0; i < this->MAX_ITER_; i++)
     {
         this->stk_[0].push(this->val1_);
         this->stk_[0].push(this->val2_);
@@ -41,52 +41,46 @@ TYPED_TEST(StackTest, push_pop)
     }
 }
 
-TYPED_TEST(StackTest, start_size)
-{
-    EXPECT_TRUE(this->stk_[0].size() == 0);
-}
-
-TYPED_TEST(StackTest, empty)
+TYPED_TEST(StackTest, StartSize)
 {
     EXPECT_TRUE(this->stk_[0].empty());
 }
 
-TYPED_TEST(StackTest, push_size)
+TYPED_TEST(StackTest, PushSize)
 {
-    EXPECT_TRUE(this->stk_[0].size() == 0);
-    for (size_t i = 1; i < this->MAX_ITER; i++)
+    for (size_t i = 1; i < this->MAX_ITER_; i++)
     {
         this->stk_[0].push(this->val1_);
         EXPECT_TRUE(this->stk_[0].size() == i);
     }
 }
 
-TYPED_TEST(StackTest, pop_size)
+TYPED_TEST(StackTest, PopSize)
 {
-    for (size_t i = 1; i <= this->MAX_ITER; i++)
+    for (size_t i = 1; i <= this->MAX_ITER_; i++)
     {
         this->stk_[0].push(this->val1_);
     }
-    EXPECT_TRUE(this->stk_[0].size() == this->MAX_ITER);
+    EXPECT_TRUE(this->stk_[0].size() == this->MAX_ITER_);
 
-    for (size_t i = this->MAX_ITER; i > 0; i--)
+    for (size_t i = this->MAX_ITER_; i > 0; i--)
     {
         EXPECT_TRUE(this->stk_[0].size() == i);
         this->stk_[0].pop();
     }
 }
 
-TYPED_TEST(StackTest, clear)
+TYPED_TEST(StackTest, Clear)
 {
-    for (size_t i = 1; i <= this->MAX_ITER; i++)
+    for (size_t i = 1; i <= this->MAX_ITER_; i++)
     {
         this->stk_[0].push(this->val1_);
     }
-    EXPECT_TRUE(this->stk_[0].size() == this->MAX_ITER);
+    EXPECT_TRUE(this->stk_[0].size() == this->MAX_ITER_);
     this->stk_[0].clear();
-    EXPECT_TRUE(this->stk_[0].size() == 0);
+    EXPECT_TRUE(this->stk_[0].empty());
 
-    for (size_t i = 1; i < this->MAX_ITER; i++)
+    for (size_t i = 1; i < this->MAX_ITER_; i++)
     {
         this->stk_[0].push(this->val1_);
         this->stk_[0].push(this->val2_);
@@ -96,10 +90,10 @@ TYPED_TEST(StackTest, clear)
     }
 }
 
-TYPED_TEST(StackTest, operator_equal)
+TYPED_TEST(StackTest, OperatorEqual)
 {
     EXPECT_TRUE(this->stk_[0] == this->stk_[1]);
-    for (size_t i = 0; i < this->MAX_ITER; i++)
+    for (size_t i = 0; i < this->MAX_ITER_; i++)
     {
         this->stk_[0].push(this->val1_);
         this->stk_[0].push(this->val2_);
@@ -116,10 +110,10 @@ TYPED_TEST(StackTest, operator_equal)
     EXPECT_FALSE(this->stk_[0] == this->stk_[1]);
 }
 
-TYPED_TEST(StackTest, operator_not_equal)
+TYPED_TEST(StackTest, OperatorNotEqual)
 {
     EXPECT_FALSE(this->stk_[0] != this->stk_[1]);
-    for (size_t i = 0; i < this->MAX_ITER; i++)
+    for (size_t i = 0; i < this->MAX_ITER_; i++)
     {
         this->stk_[0].push(this->val1_);
         this->stk_[0].push(this->val2_);
@@ -136,9 +130,9 @@ TYPED_TEST(StackTest, operator_not_equal)
     EXPECT_TRUE(this->stk_[0] != this->stk_[1]);
 }
 
-TYPED_TEST(StackTest, assignment)
+TYPED_TEST(StackTest, Assignment)
 {
-    for (size_t i = 0; i < this->MAX_ITER; i++)
+    for (size_t i = 0; i < this->MAX_ITER_; i++)
     {
         this->stk_[0].push(this->val1_);
         this->stk_[0].push(this->val2_);
@@ -147,10 +141,10 @@ TYPED_TEST(StackTest, assignment)
     EXPECT_TRUE(this->stk_[0] == this->stk_[1]);
 }
 
-TYPED_TEST(StackTest, copy_constructor)
+TYPED_TEST(StackTest, CopyConstructor)
 {
     using T = typename TestFixture::MyType;
-    for (size_t i = 0; i < this->MAX_ITER; i++)
+    for (size_t i = 0; i < this->MAX_ITER_; i++)
     {
         this->stk_[0].push(this->val1_);
         this->stk_[0].push(this->val2_);
@@ -159,10 +153,10 @@ TYPED_TEST(StackTest, copy_constructor)
     EXPECT_TRUE(this->stk_[0] == stk);
 }
 
-TYPED_TEST(StackTest, swap)
+TYPED_TEST(StackTest, Swap)
 {
     using T = typename TestFixture::MyType;
-    for (size_t i = 0; i < this->MAX_ITER; i++)
+    for (size_t i = 0; i < this->MAX_ITER_; i++)
     {
         this->stk_[0].push(this->val1_);
         this->stk_[0].push(this->val2_);

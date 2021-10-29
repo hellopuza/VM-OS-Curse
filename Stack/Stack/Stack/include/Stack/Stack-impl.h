@@ -1,7 +1,7 @@
-#ifndef STACK_IMPL_H
-#define STACK_IMPL_H
+#ifndef STACK_STACK_IMPL_H
+#define STACK_STACK_IMPL_H
 
-#include "Stack.h"
+#include "Stack/Stack.h"
 
 #include <utility>
 
@@ -14,10 +14,10 @@ Stack<T>::Stack () : size_ (0), capacity_ (DEFAULT_CAPACITY)
 }
 
 template<typename T>
-Stack<T>::Stack (size_t size, T *data) : size_ (size), capacity_ (size)
+Stack<T>::Stack (size_t size, const T *data) : size_ (size), capacity_ (size)
 {
-    data_ = new T[size];
-    for (size_t i = 0; i < size; i++) { data_[i] = data[i]; }
+    data_ = new T[capacity_];
+    for (size_t i = 0; i < size_; i++) { data_[i] = data[i]; }
 }
 
 template<typename T>
@@ -28,7 +28,7 @@ Stack<T>::Stack (const Stack &obj) : size_ (obj.size_), capacity_ (obj.capacity_
 }
 
 template<typename T>
-Stack<T>::Stack (Stack &&obj) : size_ (obj.size_), capacity_ (obj.capacity_), data_ (obj.data_)
+Stack<T>::Stack (Stack &&obj) noexcept : size_ (obj.size_), capacity_ (obj.capacity_), data_ (obj.data_)
 {
     obj.data_ = nullptr;
 }
@@ -53,7 +53,7 @@ Stack<T> &Stack<T>::operator= (const Stack &obj)
 }
 
 template<typename T>
-Stack<T> &Stack<T>::operator= (Stack &&obj)
+Stack<T> &Stack<T>::operator= (Stack &&obj) noexcept
 {
     if (this == &obj)
     {
@@ -173,4 +173,4 @@ void Stack<T>::expand ()
 
 } // namespace puza
 
-#endif // STACK_IMPL_H
+#endif // STACK_STACK_IMPL_H

@@ -1,5 +1,5 @@
-#ifndef STACK_H
-#define STACK_H
+#ifndef STACK_STACK_H
+#define STACK_STACK_H
 
 #include <cstdlib>
 
@@ -10,13 +10,13 @@ class Stack
 {
 public:
     Stack ();
-    Stack (size_t size, T *data);
+    Stack (size_t size, const T *data);
     Stack (const Stack &obj);
-    Stack (Stack &&obj);
+    Stack (Stack &&obj) noexcept;
     ~Stack ();
 
     Stack &operator= (const Stack &obj);
-    Stack &operator= (Stack &&obj);
+    Stack &operator= (Stack &&obj) noexcept;
     bool operator== (const Stack &obj) const;
     bool operator!= (const Stack &obj) const;
 
@@ -45,13 +45,13 @@ class Stack<bool>
 {
 public:
     Stack ();
-    Stack (size_t size, bool *data);
+    Stack (size_t size, const bool *data);
     Stack (const Stack &obj);
-    Stack (Stack &&obj);
+    Stack (Stack &&obj) noexcept;
     ~Stack ();
 
     Stack &operator= (const Stack &obj);
-    Stack &operator= (Stack &&obj);
+    Stack &operator= (Stack &&obj) noexcept;
     bool operator== (const Stack &obj) const;
     bool operator!= (const Stack &obj) const;
 
@@ -76,4 +76,4 @@ private:
 
 } // namespace puza
 
-#endif // STACK_H
+#endif // STACK_STACK_H

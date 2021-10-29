@@ -12,7 +12,7 @@ FetchContent_MakeAvailable(gtest)
 
 enable_testing()
 
-set(STACK_TEST_SOURCES main.cpp)
+file(GLOB_RECURSE STACK_TEST_SOURCES *.cpp)
 set(EXEC_NAME stack_test)
 
 add_executable(${EXEC_NAME} ${STACK_TEST_SOURCES})
@@ -22,5 +22,7 @@ add_custom_target(run_${EXEC_NAME}
                   COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${EXEC_NAME})
 add_dependencies(run_${EXEC_NAME} ${EXEC_NAME})
 
+set_target_properties(${EXEC_NAME} PROPERTIES CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY}")
+
 include(GoogleTest)
-gtest_discover_tests(stack_test PROPERTIES LABELS "unit")
+gtest_discover_tests(${EXEC_NAME} PROPERTIES LABELS "unit")
