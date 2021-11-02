@@ -6,7 +6,7 @@ add_subdirectory(test)
 file(GLOB_RECURSE STACK_SOURCES *.cpp)
 file(GLOB_RECURSE STACK_HEADERS *.h)
 
-add_library(stack SHARED ${STACK_SOURCES} ${STACK_HEADERS})
+add_library(stack STATIC ${STACK_SOURCES} ${STACK_HEADERS})
 target_include_directories(stack PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 set_target_properties(stack PROPERTIES
