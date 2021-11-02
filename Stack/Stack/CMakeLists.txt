@@ -12,7 +12,6 @@ target_include_directories(stack PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set_target_properties(stack PROPERTIES
     CXX_STANDARD          11
     CXX_STANDARD_REQUIRED ON
-    CXX_CLANG_TIDY        "${CMAKE_CXX_CLANG_TIDY}"
 )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra -Wpedantic -Wcast-qual -Wcast-align -Wconversion \

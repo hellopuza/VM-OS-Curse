@@ -17,25 +17,25 @@ public:
 
     Stack &operator=(const Stack &obj);
     Stack &operator=(Stack &&obj) noexcept;
-    bool   operator==(const Stack &obj) const;
-    bool   operator!=(const Stack &obj) const;
+    bool operator==(const Stack &obj) const;
+    bool operator!=(const Stack &obj) const;
 
-    void     push(const T &value);
-    void     pop();
+    void push(const T &value);
+    void pop();
     const T &top() const;
-    T &      top();
+    T &top();
 
-    void   swap(Stack *obj);
-    bool   empty() const;
+    void swap(Stack *obj);
+    bool empty() const;
     size_t size() const;
-    void   clear();
+    void clear();
 
     const size_t DEFAULT_CAPACITY = 16;
 
 private:
     size_t size_;
     size_t capacity_;
-    T *    data_;
+    T *data_;
 
     void expand();
 };
@@ -52,24 +52,24 @@ public:
 
     Stack &operator=(const Stack &obj);
     Stack &operator=(Stack &&obj) noexcept;
-    bool   operator==(const Stack &obj) const;
-    bool   operator!=(const Stack &obj) const;
+    bool operator==(const Stack &obj) const;
+    bool operator!=(const Stack &obj) const;
 
     void push(bool value);
     void pop();
     bool top() const;
 
-    void   swap(Stack *obj);
-    bool   empty() const;
+    void swap(Stack *obj);
+    bool empty() const;
     size_t size() const;
-    void   clear();
+    void clear();
 
     const size_t DEFAULT_CAPACITY = 16;
 
 private:
     size_t size_;
     size_t capacity_;
-    char * data_;
+    char *data_;
 
     void expand();
 };

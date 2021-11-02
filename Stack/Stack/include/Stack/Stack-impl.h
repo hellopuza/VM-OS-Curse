@@ -43,7 +43,7 @@ Stack<T> &Stack<T>::operator=(const Stack &obj)
 
     delete[] data_;
 
-    size_     = obj.size_;
+    size_ = obj.size_;
     capacity_ = obj.capacity_;
 
     data_ = new T[capacity_];
@@ -60,11 +60,11 @@ Stack<T> &Stack<T>::operator=(Stack &&obj) noexcept
         return *this;
     }
 
-    size_     = obj.size_;
+    size_ = obj.size_;
     capacity_ = obj.capacity_;
 
     delete[] data_;
-    data_     = obj.data_;
+    data_ = obj.data_;
     obj.data_ = nullptr;
 
     return *this;
@@ -133,8 +133,8 @@ template<typename T>
 void Stack<T>::swap(Stack *obj)
 {
     Stack<T> temp = std::move(*this);
-    *this         = std::move(*obj);
-    *obj          = std::move(temp);
+    *this = std::move(*obj);
+    *obj = std::move(temp);
 }
 
 template<typename T>
@@ -154,9 +154,9 @@ void Stack<T>::clear()
 {
     delete[] data_;
 
-    size_     = 0;
+    size_ = 0;
     capacity_ = DEFAULT_CAPACITY;
-    data_     = new T[capacity_];
+    data_ = new T[capacity_];
 }
 
 template<typename T>

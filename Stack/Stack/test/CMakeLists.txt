@@ -22,8 +22,6 @@ add_custom_target(run_${EXEC_NAME}
                   COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${EXEC_NAME})
 add_dependencies(run_${EXEC_NAME} ${EXEC_NAME})
 
-set_target_properties(${EXEC_NAME} PROPERTIES CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY}")
-
 if(ADD_SANITIZERS)
     target_compile_options(${EXEC_NAME} PUBLIC -fsanitize=address -g)
     set_target_properties(${EXEC_NAME} PROPERTIES LINK_FLAGS "-fsanitize=address")

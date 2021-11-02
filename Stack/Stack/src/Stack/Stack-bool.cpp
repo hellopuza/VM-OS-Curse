@@ -44,7 +44,7 @@ Stack<bool> &Stack<bool>::operator=(const Stack &obj)
 
     delete[] data_;
 
-    size_     = obj.size_;
+    size_ = obj.size_;
     capacity_ = obj.capacity_;
 
     data_ = new char[capacity_ / 8 + 1];
@@ -60,11 +60,11 @@ Stack<bool> &Stack<bool>::operator=(Stack &&obj) noexcept
         return *this;
     }
 
-    size_     = obj.size_;
+    size_ = obj.size_;
     capacity_ = obj.capacity_;
 
     delete[] data_;
-    data_     = obj.data_;
+    data_ = obj.data_;
     obj.data_ = nullptr;
 
     return *this;
@@ -117,8 +117,8 @@ void Stack<bool>::pop()
 void Stack<bool>::swap(Stack *obj)
 {
     Stack<bool> temp = std::move(*this);
-    *this            = std::move(*obj);
-    *obj             = std::move(temp);
+    *this = std::move(*obj);
+    *obj = std::move(temp);
 }
 
 size_t Stack<bool>::size() const
@@ -135,9 +135,9 @@ void Stack<bool>::clear()
 {
     delete[] data_;
 
-    size_     = 0;
+    size_ = 0;
     capacity_ = DEFAULT_CAPACITY;
-    data_     = new char[capacity_ / 8 + 1];
+    data_ = new char[capacity_ / 8 + 1];
 }
 
 void Stack<bool>::expand()

@@ -8,9 +8,9 @@ class StackTest : public testing::Test
 protected:
     using MyType = T;
     puza::Stack<T> stk_[2];
-    T              val1_     = static_cast<T>(0);
-    T              val2_     = static_cast<T>(1);
-    const size_t   MAX_ITER_ = 1000000;
+    T val1_ = static_cast<T>(0);
+    T val2_ = static_cast<T>(1);
+    const size_t MAX_ITER_ = 1000000;
 };
 
 typedef testing::Types<double, float, int, char, bool> MyTypes;
