@@ -17,6 +17,7 @@ public:
 
     Stack &operator=(const Stack &obj);
     Stack &operator=(Stack &&obj) noexcept;
+    
     bool operator==(const Stack &obj) const;
     bool operator!=(const Stack &obj) const;
 
@@ -28,7 +29,6 @@ public:
     void swap(Stack *obj);
     bool empty() const;
     size_t size() const;
-    void clear();
 
     const size_t DEFAULT_CAPACITY = 16;
 
@@ -62,7 +62,6 @@ public:
     void swap(Stack *obj);
     bool empty() const;
     size_t size() const;
-    void clear();
 
     const size_t DEFAULT_CAPACITY = 16;
 

@@ -131,15 +131,6 @@ bool Stack<bool>::empty() const
     return size_ == 0;
 }
 
-void Stack<bool>::clear()
-{
-    delete[] data_;
-
-    size_ = 0;
-    capacity_ = DEFAULT_CAPACITY;
-    data_ = new char[capacity_ / 8 + 1];
-}
-
 void Stack<bool>::expand()
 {
     capacity_ *= 2;

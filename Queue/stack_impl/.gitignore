@@ -10,6 +10,3 @@
 # VSCode config files.
 .vscode
 .vs
-
-# Build directory
-build

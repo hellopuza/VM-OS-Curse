@@ -7,7 +7,9 @@ file(GLOB_RECURSE STACK_SOURCES *.cpp)
 file(GLOB_RECURSE STACK_HEADERS *.h)
 
 add_library(stack STATIC ${STACK_SOURCES} ${STACK_HEADERS})
-target_include_directories(stack PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+set(STACK_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(stack PUBLIC ${STACK_INCLUDE})
 
 set_target_properties(stack PROPERTIES
     CXX_STANDARD          11

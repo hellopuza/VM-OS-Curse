@@ -67,26 +67,16 @@ TYPED_TEST(StackTest, PopSize)
     }
 }
 
-TYPED_TEST(StackTest, Clear)
-{
-    for (size_t i = 1; i <= this->MAX_ITER_; i++) { this->stk_[0].push(this->val1_); }
-    EXPECT_TRUE(this->stk_[0].size() == this->MAX_ITER_);
-    this->stk_[0].clear();
-    EXPECT_TRUE(this->stk_[0].empty());
-
-    for (size_t i = 1; i < this->MAX_ITER_; i++)
-    {
-        this->stk_[0].push(this->val1_);
-        this->stk_[0].push(this->val2_);
-        EXPECT_TRUE(this->stk_[0].size() == i + 1);
-        EXPECT_TRUE(this->stk_[0].top() == this->val2_);
-        this->stk_[0].pop();
-    }
-}
-
 TYPED_TEST(StackTest, OperatorEqual)
 {
     EXPECT_TRUE(this->stk_[0] == this->stk_[1]);
+
+    this->stk_[0].push(this->val1_);
+    this->stk_[1].push(this->val2_);
+    EXPECT_FALSE(this->stk_[0] == this->stk_[1]);
+    this->stk_[0].pop();
+    this->stk_[1].pop();
+
     for (size_t i = 0; i < this->MAX_ITER_; i++)
     {
         this->stk_[0].push(this->val1_);
@@ -96,17 +86,18 @@ TYPED_TEST(StackTest, OperatorEqual)
         this->stk_[1].push(this->val2_);
     }
     EXPECT_TRUE(this->stk_[0] == this->stk_[1]);
-
-    this->stk_[0].clear();
-    this->stk_[1].clear();
-    this->stk_[0].push(this->val1_);
-    this->stk_[1].push(this->val2_);
-    EXPECT_FALSE(this->stk_[0] == this->stk_[1]);
 }
 
 TYPED_TEST(StackTest, OperatorNotEqual)
 {
     EXPECT_FALSE(this->stk_[0] != this->stk_[1]);
+
+    this->stk_[0].push(this->val1_);
+    this->stk_[1].push(this->val2_);
+    EXPECT_TRUE(this->stk_[0] != this->stk_[1]);
+    this->stk_[0].pop();
+    this->stk_[1].pop();
+
     for (size_t i = 0; i < this->MAX_ITER_; i++)
     {
         this->stk_[0].push(this->val1_);
@@ -116,12 +107,6 @@ TYPED_TEST(StackTest, OperatorNotEqual)
         this->stk_[1].push(this->val2_);
     }
     EXPECT_FALSE(this->stk_[0] != this->stk_[1]);
-
-    this->stk_[0].clear();
-    this->stk_[1].clear();
-    this->stk_[0].push(this->val1_);
-    this->stk_[1].push(this->val2_);
-    EXPECT_TRUE(this->stk_[0] != this->stk_[1]);
 }
 
 TYPED_TEST(StackTest, Assignment)

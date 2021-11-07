@@ -150,16 +150,6 @@ bool Stack<T>::empty() const
 }
 
 template<typename T>
-void Stack<T>::clear()
-{
-    delete[] data_;
-
-    size_ = 0;
-    capacity_ = DEFAULT_CAPACITY;
-    data_ = new T[capacity_];
-}
-
-template<typename T>
 void Stack<T>::expand()
 {
     capacity_ *= 2;
