@@ -8,7 +8,8 @@
 namespace puza {
 
 template<typename T>
-Queue<T>::Queue(size_t size, const T *data) : push_stk_(size, data) {}
+Queue<T>::Queue(size_t size, const T *data) : push_stk_(size, data)
+{}
 
 template<typename T>
 Queue<T>::Queue(Queue &&obj) noexcept : pop_stk_(std::move(obj.pop_stk_)), push_stk_(std::move(obj.push_stk_))

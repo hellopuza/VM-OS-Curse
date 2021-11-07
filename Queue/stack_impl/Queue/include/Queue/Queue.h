@@ -34,7 +34,7 @@ public:
 
 private:
     void move_elements();
-    
+
     Stack<T> pop_stk_;
     Stack<T> push_stk_;
 };

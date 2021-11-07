@@ -6,8 +6,7 @@ namespace puza {
 
 Queue<bool>::Queue(size_t size, const bool *data) : push_stk_(size, data) {}
 
-Queue<bool>::Queue(Queue &&obj) noexcept : pop_stk_(std::move(obj.pop_stk_)), push_stk_(std::move(obj.push_stk_))
-{}
+Queue<bool>::Queue(Queue &&obj) noexcept : pop_stk_(std::move(obj.pop_stk_)), push_stk_(std::move(obj.push_stk_)) {}
 
 Queue<bool> &Queue<bool>::operator=(const Queue &obj)
 {
@@ -57,7 +56,7 @@ void Queue<bool>::pop()
         push_stk_.pop();
         return;
     }
-    
+
     move_elements();
     pop_stk_.pop();
 }
