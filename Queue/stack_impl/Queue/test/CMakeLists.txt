@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.16.3)
 project(QueueTest)
 
 set(CMAKE_CXX_STANDARD 11)
@@ -16,11 +16,9 @@ enable_testing()
 file(GLOB_RECURSE QUEUE_TEST_SOURCES *.cpp)
 set(EXEC_NAME queue_test)
 
-add_executable(${EXEC_NAME} ${QUEUE_TEST_SOURCES})
+add_executable(${EXEC_NAME} ${QUEUE_TEST_SOURCES} ${QUEUE_SOURCES})
 
-target_include_directories(${EXEC_NAME}
-    PUBLIC ${QUEUE_INCLUDE}
-)
+target_include_directories(${EXEC_NAME} PUBLIC ${QUEUE_INCLUDE})
 
 add_custom_target(run_${EXEC_NAME}
                   COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${EXEC_NAME})
@@ -31,7 +29,7 @@ if(ADD_SANITIZERS)
     set_target_properties(${EXEC_NAME} PROPERTIES LINK_FLAGS "-fsanitize=address")
 endif()
 
-target_link_libraries(${EXEC_NAME} gtest_main queue)
+target_link_libraries(${EXEC_NAME} gtest_main)
 
 include(GoogleTest)
 gtest_discover_tests(${EXEC_NAME} PROPERTIES LABELS "unit")
