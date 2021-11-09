@@ -3,7 +3,7 @@ project(Queue)
 
 file(GLOB_RECURSE ALL_CXX_SOURCE_FILES *.cpp *.h)
 
-find_program(CLANG_FORMAT "clang-format" REQUIRED)
+find_program(CLANG_FORMAT "clang-format")
 add_custom_target(
     format
     COMMAND clang-format-12
