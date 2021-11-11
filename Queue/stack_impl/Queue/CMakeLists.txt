@@ -6,7 +6,9 @@ file(GLOB_RECURSE QUEUE_HEADERS *.h)
 
 set(QUEUE_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-add_subdirectory(test)
+if (ADD_TESTING)
+    add_subdirectory(test)
+endif()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra -Wpedantic -Wcast-qual -Wcast-align -Wconversion \
     -Wsign-promo -Wfloat-equal -Wenum-compare -Wold-style-cast -Wredundant-decls -Wsign-conversion -Wnon-virtual-dtor \
