@@ -1,23 +1,12 @@
 cmake_minimum_required(VERSION 3.16.3)
-project(Queue)
+project(Queue-stack_impl VERSION 1.0.0 DESCRIPTION "Queue library with array implementation")
 
-file(GLOB_RECURSE ALL_CXX_SOURCE_FILES *.cpp *.h)
+file(GLOB_RECURSE QUEUE_STACK_IMPL_SOURCES *.cpp)
+set(QUEUE_STACK_IMPL_SOURCES ${QUEUE_STACK_IMPL_SOURCES} PARENT_SCOPE)
 
-find_program(CLANG_FORMAT "clang-format")
-add_custom_target(
-    format
-    COMMAND clang-format-12
-    -i
-    -style=file
-    ${ALL_CXX_SOURCE_FILES}
+set(QUEUE_STACK_IMPL_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/include PARENT_SCOPE)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra -Wpedantic -Wcast-qual -Wcast-align -Wconversion \
+    -Wsign-promo -Wfloat-equal -Wenum-compare -Wold-style-cast -Wredundant-decls -Wsign-conversion -Wnon-virtual-dtor \
+    -Wctor-dtor-privacy -Woverloaded-virtual -Wno-float-equal"
 )
-
-if (ADD_CLANG_TIDY)
-    set(CMAKE_CXX_CLANG_TIDY
-        clang-tidy;
-        --format-style=file;
-        --header-filter=*.h;
-    )
-endif()
-
-add_subdirectory(Queue)

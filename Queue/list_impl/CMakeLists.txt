@@ -1,23 +1,9 @@
-cmake_minimum_required(VERSION 3.9)
-project(Queue)
+cmake_minimum_required(VERSION 3.16.3)
+project(Queue-list_impl VERSION 1.0.0 DESCRIPTION "Queue library with list implementation")
 
-file(GLOB_RECURSE ALL_CXX_SOURCE_FILES *.cpp *.h)
+set(QUEUE_LIST_IMPL_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/include PARENT_SCOPE)
 
-find_program(CLANG_FORMAT "clang-format")
-add_custom_target(
-    format
-    COMMAND clang-format-12
-    -i
-    -style=file
-    ${ALL_CXX_SOURCE_FILES}
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra -Wpedantic -Wcast-qual -Wcast-align -Wconversion \
+    -Wsign-promo -Wfloat-equal -Wenum-compare -Wold-style-cast -Wredundant-decls -Wsign-conversion -Wnon-virtual-dtor \
+    -Wctor-dtor-privacy -Woverloaded-virtual -Wno-float-equal"
 )
-
-if (ADD_CLANG_TIDY)
-    set(CMAKE_CXX_CLANG_TIDY
-        clang-tidy;
-        --format-style=file;
-        --header-filter=*.h;
-    )
-endif()
-
-add_subdirectory(Queue)
