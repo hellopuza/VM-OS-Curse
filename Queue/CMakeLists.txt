@@ -26,3 +26,7 @@ add_subdirectory(stack_impl)
 if (ADD_TESTING)
     add_subdirectory(test)
 endif()
+
+if (ADD_BENCHMARK)
+    add_subdirectory(benchmark)
+endif()

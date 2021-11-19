@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16.3)
 project(QueueTest)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 20)
 
 include(FetchContent)
 FetchContent_Declare(gtest QUIET URL https://github.com/google/googletest/archive/release-1.10.0.tar.gz)
@@ -17,9 +17,8 @@ file(GLOB_RECURSE QUEUE_TEST_SOURCES *.cpp)
 
 string(REPLACE " " ";" IMPLEMENTATIONS ${ADD_TESTING})
 
-foreach (IMPL IN LISTS IMPLEMENTATIONS)
+foreach(IMPL IN LISTS IMPLEMENTATIONS)
     set(EXEC_NAME queue_${IMPL}_test)
-
     string(TOUPPER ${IMPL} UPPER_IMPL)
     
     add_executable(${EXEC_NAME} ${QUEUE_TEST_SOURCES} ${QUEUE_${UPPER_IMPL}_SOURCES})
