@@ -10,6 +10,7 @@ class Stack
 {
 public:
     Stack();
+    explicit Stack(float grow_factor);
     Stack(size_t size, const T *data);
     Stack(const Stack &obj);
     Stack(Stack &&obj) noexcept;
@@ -17,7 +18,6 @@ public:
 
     Stack &operator=(const Stack &obj);
     Stack &operator=(Stack &&obj) noexcept;
-    
     bool operator==(const Stack &obj) const;
     bool operator!=(const Stack &obj) const;
 
@@ -31,8 +31,10 @@ public:
     size_t size() const;
 
     const size_t DEFAULT_CAPACITY = 16;
+    const float DEFAULT_GROW_FACTOR = 1.6F;
 
 private:
+    float grow_factor_ = DEFAULT_GROW_FACTOR;
     size_t size_;
     size_t capacity_;
     T *data_;
@@ -45,6 +47,7 @@ class Stack<bool>
 {
 public:
     Stack();
+    explicit Stack(float grow_factor);
     Stack(size_t size, const bool *data);
     Stack(const Stack &obj);
     Stack(Stack &&obj) noexcept;
@@ -64,8 +67,10 @@ public:
     size_t size() const;
 
     const size_t DEFAULT_CAPACITY = 16;
+    const float DEFAULT_GROW_FACTOR = 1.6F;
 
 private:
+    float grow_factor_ = DEFAULT_GROW_FACTOR;
     size_t size_;
     size_t capacity_;
     char *data_;

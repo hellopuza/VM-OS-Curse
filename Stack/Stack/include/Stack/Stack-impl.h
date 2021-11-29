@@ -14,6 +14,12 @@ Stack<T>::Stack() : size_(0), capacity_(DEFAULT_CAPACITY)
 }
 
 template<typename T>
+Stack<T>::Stack(float grow_factor) : grow_factor_(grow_factor), size_(0), capacity_(DEFAULT_CAPACITY)
+{
+    data_ = new T[capacity_];
+}
+
+template<typename T>
 Stack<T>::Stack(size_t size, const T *data) : size_(size), capacity_(size)
 {
     data_ = new T[capacity_];
@@ -152,7 +158,7 @@ bool Stack<T>::empty() const
 template<typename T>
 void Stack<T>::expand()
 {
-    capacity_ *= 2;
+    capacity_ = static_cast<size_t>(static_cast<float>(capacity_) * grow_factor_);
     T *temp = new T[capacity_];
 
     for (size_t i = 0; i < size_; i++) { temp[i] = data_[i]; }

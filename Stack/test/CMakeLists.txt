@@ -14,6 +14,7 @@ FetchContent_MakeAvailable(gtest)
 enable_testing()
 
 file(GLOB_RECURSE STACK_TEST_SOURCES *.cpp)
+
 set(EXEC_NAME stack_test)
 
 add_executable(${EXEC_NAME} ${STACK_TEST_SOURCES} ${STACK_SOURCES})

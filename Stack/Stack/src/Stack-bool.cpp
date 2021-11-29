@@ -9,6 +9,11 @@ Stack<bool>::Stack() : size_(0), capacity_(DEFAULT_CAPACITY)
     data_ = new char[capacity_ / 8 + 1];
 }
 
+Stack<bool>::Stack(float grow_factor) : grow_factor_(grow_factor), size_(0), capacity_(DEFAULT_CAPACITY)
+{
+    data_ = new char[capacity_ / 8 + 1];
+}
+
 Stack<bool>::Stack(size_t size, const bool *data) : size_(size), capacity_(size)
 {
     data_ = new char[capacity_ / 8 + 1];
@@ -133,7 +138,7 @@ bool Stack<bool>::empty() const
 
 void Stack<bool>::expand()
 {
-    capacity_ *= 2;
+    capacity_ = static_cast<size_t>(static_cast<float>(capacity_) * grow_factor_);
     char *temp = new char[capacity_ / 8 + 1];
 
     for (size_t i = 0; i <= size_ / 8; i++) { temp[i] = data_[i]; }
