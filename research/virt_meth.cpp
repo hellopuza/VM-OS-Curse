@@ -1,13 +1,12 @@
 #include <benchmark/benchmark.h>
-#include <cmath>
 
-struct Square
+struct ISquare
 {
     virtual ~Square() = default;
     virtual float vsquare() const = 0;
 };
 
-struct Rectangle : public Square
+struct Rectangle : public ISquare
 {
     float a = 0;
     float b = 0;
@@ -26,7 +25,7 @@ struct Rectangle : public Square
 static void Virtual(benchmark::State& state)
 {
     auto* rect = new Rectangle;
-    Square* sqr = rect;
+    ISquare* sqr = rect;
     for (auto _ : state)
     {
         for (size_t i = 0; i < state.range(); i++)

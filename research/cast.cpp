@@ -1,26 +1,22 @@
 #include <benchmark/benchmark.h>
-#include <cmath>
 
 struct Base
 {
     virtual ~Base() = default;
 };
 
-struct VirtDerived : virtual public Base
-{};
-
 struct Derived : public Base
 {};
 
 static void Dynamic(benchmark::State& state)
 {
-    auto* derived = new VirtDerived;
+    auto* derived = new Derived;
     auto* base = static_cast<Base*>(derived);
     for (auto _ : state)
     {
         for (size_t i = 0; i < state.range(); i++)
         {
-            derived = dynamic_cast<VirtDerived*>(base);
+            derived = dynamic_cast<Derived*>(base);
         }
     }
     delete derived;

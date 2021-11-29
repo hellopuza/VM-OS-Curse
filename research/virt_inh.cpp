@@ -1,6 +1,4 @@
 #include <benchmark/benchmark.h>
-#include <cmath>
-#include <iostream>
 
 struct Base
 {
