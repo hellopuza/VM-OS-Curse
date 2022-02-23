@@ -80,7 +80,7 @@ Queue<T> &Queue<T>::operator=(const Queue &obj)
     delete_nodes();
     size_ = obj.size_;
 
-    if (!empty())
+    if (!obj.empty())
     {
         front_ = new Node;
         Node *current_node = front_;
