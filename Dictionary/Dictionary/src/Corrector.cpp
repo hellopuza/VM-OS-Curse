@@ -15,6 +15,11 @@ Hash& Hash::operator()(const size_t& data)
 
 Corrector::Corrector(size_t dict_num) : dicts_(dict_num), info_(5) {}
 
+void Corrector::setMode(int mode)
+{
+    mode_ = mode;
+}
+
 bool Corrector::load(const char* filename)
 {
     std::ifstream file(filename);
@@ -39,21 +44,11 @@ bool Corrector::load(const char* filename)
     return true;
 }
 
-bool Corrector::parse(const char* filename)
+bool Corrector::process(const char* filename)
 {
     if (text_.load(filename))
     {
-        for (const auto& text_it : text_)
-        {
-            std::string word = prepare_word(text_it.current_word());
-            info_.appendWord(text_it.current_section());
-            
-            if ((word.length() >= MIN_WORD_LEN_) && !(dicts_[word.length() - MIN_WORD_LEN_].contains(word)))
-            {
-                correct(text_it);
-            }
-        }
-
+        parseText();
         text_.save(filename);
     }
     else
@@ -64,10 +59,26 @@ bool Corrector::parse(const char* filename)
     return true;
 }
 
-void Corrector::correct(const TextEditor::iterator& text_it)
+void Corrector::parseText()
 {
-    std::string word = prepare_word(text_it.current_word());
+    for (const auto& text_it : text_)
+    {
+        std::string word = prepare_word(text_it.current_word());
 
+        if (mode_ == OUTPUT)
+        {
+            info_.appendWord(text_it.current_section());
+        }
+            
+        if ((word.length() >= MIN_WORD_LEN_) && !(dicts_[word.length() - MIN_WORD_LEN_].contains(word)))
+        {
+            correctWord(text_it, word);
+        }
+    }
+}
+
+void Corrector::correctWord(const TextEditor::iterator& text_it, const std::string& word)
+{
     for (int delta_len = -1; delta_len < 2; delta_len++)
     {
         auto word_len = static_cast<int>(word.length() - MIN_WORD_LEN_) + delta_len;
@@ -77,15 +88,21 @@ void Corrector::correct(const TextEditor::iterator& text_it)
             {
                 text_.replace(text_it, dict_it.value.first);
 
-                info_.setMessage("Corrected to " + dict_it.value.first);
-                info_.print();
+                if (mode_ == OUTPUT)
+                {
+                    info_.setMessage("Corrected to " + dict_it.value.first);
+                    info_.print();
+                }
                 return;
             }
         }
     }
 
-    info_.setMessage("Unknown word");
-    info_.print();
+    if (mode_ == OUTPUT)
+    {
+        info_.setMessage("Unknown word");
+        info_.print();
+    }
 }
 
 } // namespace puza

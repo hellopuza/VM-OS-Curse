@@ -6,6 +6,11 @@ namespace puza {
 
 std::string prepare_word(const std::string& word)
 {
+    if (isupper(word[0]))
+    {
+        return std::string();
+    }
+
     std::string res;
     for (const auto& c : word)
     {
