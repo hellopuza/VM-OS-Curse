@@ -1,47 +1,41 @@
 #include "HashTable/Hash.h"
+
 #include <cstring>
 #include <iomanip>
 
 namespace puza {
 
-Hash::Hash() : value(0)
-{}
+Hash::Hash() : value(0) {}
 
-Hash::Hash(TYPE val) : value(val)
-{}
+Hash::Hash(TYPE val) : value(val) {}
 
-Hash Hash::operator()(const void* buf, size_t size) const
-{
-    return sum(buf, size);
-}
-
-Hash Hash::sum(const void* buf, size_t size)
+Hash& Hash::operator()(const void* buf, size_t size)
 {
     if (buf == nullptr)
     {
-        return Hash(0);
+        return *this = Hash(0);
     }
 
     const auto* data = static_cast<const char*>(buf);
 
     constexpr TYPE kPrime = 0x01000193;
-    TYPE hval = 0x811c9dc5;
+    TYPE value = 0x811c9dc5;
 
     for (size_t i = 0; i < size; i++)
     {
-        hval *= kPrime;
-        hval ^= static_cast<TYPE>(data[i]);
+        value *= kPrime;
+        value ^= static_cast<TYPE>(data[i]);
     }
 
-    return Hash(hval);
+    return *this;
 }
 
-bool Hash::operator == (const Hash& h) const
+bool Hash::operator==(const Hash& h) const
 {
     return value == h.value;
 }
 
-bool Hash::operator != (const Hash& h) const
+bool Hash::operator!=(const Hash& h) const
 {
     return value != h.value;
 }

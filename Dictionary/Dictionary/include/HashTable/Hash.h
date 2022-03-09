@@ -5,7 +5,7 @@
 
 namespace puza {
 
-struct Hash
+struct Hash final
 {
     using TYPE = unsigned long;
     TYPE value;
@@ -13,17 +13,14 @@ struct Hash
     Hash();
     explicit Hash(TYPE val);
 
-    template <typename T>
-    Hash operator()(const T& data) const;
+    template<typename T>
+    Hash& operator()(const T& data);
 
-    Hash operator()(const void* buf, size_t size) const;
+    Hash& operator()(const void* buf, size_t size);
     bool operator==(const Hash& h) const;
     bool operator!=(const Hash& h) const;
 
     friend std::ostream& operator<<(std::ostream& os, const Hash& hash);
-
-private:
-    static Hash sum(const void* buf, size_t size);
 };
 
 } // namespace puza

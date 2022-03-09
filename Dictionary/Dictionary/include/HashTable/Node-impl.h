@@ -8,14 +8,14 @@
 namespace puza {
 
 template<typename T>
-Node<T>::Node(const T &val) : value(val)
+Node<T>::Node(const T& val) : value(val)
 {}
 
 template<typename T>
-Node<T>::Node(const Node &obj)
+Node<T>::Node(const Node& obj)
 {
-    Node *current_node = this;
-    Node *obj_node = &obj;
+    Node* current_node = this;
+    Node* obj_node = const_cast<Node*>(&obj);
 
     while (true)
     {
@@ -30,23 +30,21 @@ Node<T>::Node(const Node &obj)
 }
 
 template<typename T>
-Node<T>::Node(Node &&obj) noexcept : value(obj.value), next(obj.next)
+Node<T>::Node(Node&& obj) noexcept : value(obj.value), next(obj.next)
 {
     obj.next = nullptr;
 }
 
 template<typename T>
-Node<T> &Node<T>::operator=(const Node &obj)
+Node<T>& Node<T>::operator=(const Node& obj)
 {
     if (this == &obj)
-    {
         return *this;
-    }
 
     delete next;
 
-    Node *current_node = this;
-    Node *obj_node = &obj;
+    Node* current_node = this;
+    Node* obj_node = const_cast<Node*>(&obj);
 
     while (true)
     {
@@ -63,12 +61,10 @@ Node<T> &Node<T>::operator=(const Node &obj)
 }
 
 template<typename T>
-Node<T> &Node<T>::operator=(Node &&obj) noexcept
+Node<T>& Node<T>::operator=(Node&& obj) noexcept
 {
     if (this == &obj)
-    {
         return *this;
-    }
 
     delete next;
 
@@ -80,31 +76,31 @@ Node<T> &Node<T>::operator=(Node &&obj) noexcept
 }
 
 template<typename T>
-bool Node<T>::operator==(const Node &obj) const
+bool Node<T>::operator==(const Node& obj) const
 {
-    Node *current_node = this;
-    Node *obj_node = &obj;
+    Node* current_node = const_cast<Node*>(this);
+    Node* obj_node = const_cast<Node*>(&obj);
 
     while (true)
     {
         if (current_node->value != obj_node->value)
             return false;
-        
+
         current_node = current_node->next;
         obj_node = obj_node->next;
 
         if ((current_node == nullptr) && (obj_node == nullptr))
             break;
-        
+
         if ((current_node == nullptr) || (obj_node == nullptr))
             return false;
     }
-    
+
     return true;
 }
 
 template<typename T>
-bool Node<T>::operator!=(const Node &obj) const
+bool Node<T>::operator!=(const Node& obj) const
 {
     return !(*this == obj);
 }

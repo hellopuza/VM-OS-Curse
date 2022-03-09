@@ -3,21 +3,21 @@
 
 #include "HashTable/HashTable.h"
 
-#include <utility>
 #include <iostream>
+#include <utility>
 
 namespace puza {
 
 template<typename Key, typename T>
 HashTable<Key, T>::HashTable(size_t capacity) : size_(0), capacity_(capacity)
 {
-    array_ = new Node<std::pair<const Key, T>>*[capacity_ + 1] {nullptr};
+    array_ = new Node<std::pair<Key, T>>* [capacity_ + 1] {nullptr};
 }
 
 template<typename Key, typename T>
-HashTable<Key, T>::HashTable(const HashTable &obj) : size_(obj.size_), capacity_(obj.capacity_)
+HashTable<Key, T>::HashTable(const HashTable& obj) : size_(obj.size_), capacity_(obj.capacity_)
 {
-    array_ = new Node<std::pair<const Key, T>>*[capacity_ + 1];
+    array_ = new Node<std::pair<Key, T>>* [capacity_ + 1];
 
     for (size_t i = 0; i < capacity_; i++)
     {
@@ -29,8 +29,7 @@ HashTable<Key, T>::HashTable(const HashTable &obj) : size_(obj.size_), capacity_
 }
 
 template<typename Key, typename T>
-HashTable<Key, T>::HashTable(HashTable &&obj) noexcept: size_(obj.size_), capacity_(obj.capacity_),
-    array_(obj.array_)
+HashTable<Key, T>::HashTable(HashTable&& obj) noexcept : size_(obj.size_), capacity_(obj.capacity_), array_(obj.array_)
 {
     obj.array_ = nullptr;
 }
@@ -38,30 +37,28 @@ HashTable<Key, T>::HashTable(HashTable &&obj) noexcept: size_(obj.size_), capaci
 template<typename Key, typename T>
 HashTable<Key, T>::~HashTable()
 {
-    for (size_t i = 0; i < capacity_; i++)
+    if (array_)
     {
-        delete_chain(array_[i]);
+        for (size_t i = 0; i < capacity_; i++)
+        {
+            delete_chain(array_[i]);
+        }
+        delete[] array_;
     }
-    delete [] array_;
 }
 
 template<typename Key, typename T>
-HashTable<Key, T> &HashTable<Key, T>::operator=(const HashTable &obj)
+HashTable<Key, T>& HashTable<Key, T>::operator=(const HashTable& obj)
 {
     if (this == &obj)
-    {
         return *this;
-    }
 
-    for (size_t i = 0; i < capacity_; i++)
-    {
-        delete_chain(array_[i]);
-    }
-    delete [] array_;
+    for (size_t i = 0; i < capacity_; i++) { delete_chain(array_[i]); }
+    delete[] array_;
 
     size_ = obj.size_;
     capacity_ = obj.capacity_;
-    array_ = new Node<std::pair<const Key, T>>*[capacity_ + 1];
+    array_ = new Node<std::pair<Key, T>>* [capacity_ + 1];
 
     for (size_t i = 0; i < capacity_; i++)
     {
@@ -75,18 +72,13 @@ HashTable<Key, T> &HashTable<Key, T>::operator=(const HashTable &obj)
 }
 
 template<typename Key, typename T>
-HashTable<Key, T> &HashTable<Key, T>::operator=(HashTable &&obj) noexcept
+HashTable<Key, T>& HashTable<Key, T>::operator=(HashTable&& obj) noexcept
 {
     if (this == &obj)
-    {
         return *this;
-    }
 
-    for (size_t i = 0; i < capacity_; i++)
-    {
-        delete_chain(array_[i]);
-    }
-    delete [] array_;
+    for (size_t i = 0; i < capacity_; i++) { delete_chain(array_[i]); }
+    delete[] array_;
 
     size_ = obj.size_;
     capacity_ = obj.capacity_;
@@ -97,16 +89,13 @@ HashTable<Key, T> &HashTable<Key, T>::operator=(HashTable &&obj) noexcept
 }
 
 template<typename Key, typename T>
-bool HashTable<Key, T>::operator==(const HashTable &obj) const
+bool HashTable<Key, T>::operator==(const HashTable& obj) const
 {
     if (size_ != obj.size_)
-    {
         return false;
-    }
+
     if (empty())
-    {
         return true;
-    }
 
     for (size_t i = 0; i < capacity_; i++)
     {
@@ -124,7 +113,7 @@ bool HashTable<Key, T>::operator==(const HashTable &obj) const
 }
 
 template<typename Key, typename T>
-bool HashTable<Key, T>::operator!=(const HashTable &obj) const
+bool HashTable<Key, T>::operator!=(const HashTable& obj) const
 {
     return !(*this == obj);
 }
@@ -142,6 +131,12 @@ size_t HashTable<Key, T>::size() const
 }
 
 template<typename Key, typename T>
+size_t HashTable<Key, T>::capacity() const
+{
+    return capacity_;
+}
+
+template<typename Key, typename T>
 void HashTable<Key, T>::clear()
 {
     for (size_t i = 0; i < capacity_; i++)
@@ -154,26 +149,24 @@ void HashTable<Key, T>::clear()
 }
 
 template<typename Key, typename T>
-bool HashTable<Key, T>::insert(const Key &key, const T &value)
+bool HashTable<Key, T>::insert(const Key& key, const T& value)
 {
     size_t ind = Hash()(key).value % capacity_;
-    Node<std::pair<const Key, T>> *current_node = array_[ind];
-    Node<std::pair<const Key, T>> *prev_node = current_node;
+    Node<std::pair<Key, T>>* current_node = array_[ind];
+    Node<std::pair<Key, T>>* prev_node = current_node;
 
     while (current_node)
     {
         if (current_node->value.first == key)
             return false;
-        
+
         prev_node = current_node;
         current_node = current_node->next;
     }
 
-    current_node = new Node<std::pair<const Key, T>>(std::make_pair(key, value));
+    current_node = new Node<std::pair<Key, T>>(std::make_pair(key, value));
     if (prev_node)
-    {
         prev_node->next = current_node;
-    }
     else
         array_[ind] = current_node;
 
@@ -183,11 +176,11 @@ bool HashTable<Key, T>::insert(const Key &key, const T &value)
 }
 
 template<typename Key, typename T>
-bool HashTable<Key, T>::insert_or_assign(const Key &key, const T &value)
+bool HashTable<Key, T>::insert_or_assign(const Key& key, const T& value)
 {
     size_t ind = Hash()(key).value % capacity_;
-    Node<std::pair<const Key, T>> *current_node = array_[ind];
-    Node<std::pair<const Key, T>> *prev_node = current_node;
+    Node<std::pair<Key, T>>* current_node = array_[ind];
+    Node<std::pair<Key, T>>* prev_node = current_node;
 
     while (current_node)
     {
@@ -196,50 +189,44 @@ bool HashTable<Key, T>::insert_or_assign(const Key &key, const T &value)
             current_node->value.second = value;
             return false;
         }
-        
+
         prev_node = current_node;
         current_node = current_node->next;
     }
 
-    current_node = new Node<std::pair<const Key, T>>(std::make_pair(key, value));
+    current_node = new Node<std::pair<Key, T>>(std::make_pair(key, value));
     if (prev_node)
-    {
         prev_node->next = current_node;
-    }
     else
         array_[ind] = current_node;
-    
+
     size_++;
 
     return true;
 }
 
 template<typename Key, typename T>
-bool HashTable<Key, T>::erase(const Key &key)
+bool HashTable<Key, T>::erase(const Key& key)
 {
     size_t ind = Hash()(key).value % capacity_;
-    Node<std::pair<const Key, T>> *current_node = array_[ind];
-    Node<std::pair<const Key, T>> *prev_node = current_node;
+    Node<std::pair<Key, T>>* current_node = array_[ind];
+    Node<std::pair<Key, T>>* prev_node = current_node;
 
     while (current_node)
     {
         if (current_node->value.first == key)
         {
             if (current_node == array_[ind])
-            {
                 array_[ind] = current_node->next;
-            }
             else
-            {
                 prev_node->next = current_node->next;
-            }
 
             size_--;
 
             delete current_node;
             return true;
         }
-        
+
         prev_node = current_node;
         current_node = current_node->next;
     }
@@ -248,7 +235,7 @@ bool HashTable<Key, T>::erase(const Key &key)
 }
 
 template<typename Key, typename T>
-void HashTable<Key, T>::swap(HashTable &obj)
+void HashTable<Key, T>::swap(HashTable& obj)
 {
     HashTable<Key, T> temp = std::move(*this);
     *this = std::move(obj);
@@ -256,49 +243,43 @@ void HashTable<Key, T>::swap(HashTable &obj)
 }
 
 template<typename Key, typename T>
-T &HashTable<Key, T>::operator[](const Key& key)
+T& HashTable<Key, T>::operator[](const Key& key)
 {
     size_t ind = Hash()(key).value % capacity_;
-    Node<std::pair<const Key, T>> *current_node = array_[ind];
-    Node<std::pair<const Key, T>> *prev_node = current_node;
+    Node<std::pair<Key, T>>* current_node = array_[ind];
+    Node<std::pair<Key, T>>* prev_node = current_node;
 
     while (current_node)
     {
         if (current_node->value.first == key)
-        {
             return current_node->value.second;
-        }
-        
+
         prev_node = current_node;
         current_node = current_node->next;
     }
 
-    current_node = new Node<std::pair<const Key, T>>(std::make_pair(key, T{}));
+    current_node = new Node<std::pair<Key, T>>(std::make_pair(key, T()));
     if (prev_node)
-    {
         prev_node->next = current_node;
-    }
     else
         array_[ind] = current_node;
-    
+
     size_++;
 
     return current_node->value.second;
 }
 
 template<typename Key, typename T>
-T *HashTable<Key, T>::find(const Key& key)
+T* HashTable<Key, T>::find(const Key& key)
 {
     size_t ind = Hash()(key).value % capacity_;
-    Node<std::pair<const Key, T>> *current_node = array_[ind];
+    Node<std::pair<Key, T>>* current_node = array_[ind];
 
     while (current_node)
     {
         if (current_node->value.first == key)
-        {
             return &current_node->value.second;
-        }
-        
+
         current_node = current_node->next;
     }
 
@@ -309,15 +290,13 @@ template<typename Key, typename T>
 bool HashTable<Key, T>::contains(const Key& key) const
 {
     size_t ind = Hash()(key).value % capacity_;
-    Node<std::pair<const Key, T>> *current_node = array_[ind];
+    Node<std::pair<Key, T>>* current_node = array_[ind];
 
     while (current_node)
     {
         if (current_node->value.first == key)
-        {
             return true;
-        }
-        
+
         current_node = current_node->next;
     }
 
@@ -325,25 +304,26 @@ bool HashTable<Key, T>::contains(const Key& key) const
 }
 
 template<typename Key, typename T>
-void HashTable<Key, T>::print()
+void HashTable<Key, T>::print() const
 {
     for (const auto& it : *this)
     {
-        std::cout << "{" << it.value.first << "}{" << it.value.second << "}\n";
+        std::cout << "{" << it.value.first << "}-{" << it.value.second << "}\n";
     }
 }
 
 template<typename Key, typename T>
-HashTable<Key, T>::iterator::iterator(size_t index, Node<std::pair<const Key, T>> *pointer, const HashTable<Key, T> *ht) :
-    index_(index), pointer_(pointer), ht_(ht)
+HashTable<Key, T>::iterator::iterator(size_t index, Node<std::pair<Key, T>>* pointer, const HashTable<Key, T>* ht) :
+    index_(index),
+    pointer_(pointer), ht_(ht)
 {}
 
 template<typename Key, typename T>
 typename HashTable<Key, T>::iterator& HashTable<Key, T>::iterator::operator++()
 {
-    if (ht_->array_[index_])
+    if (ht_->array_[index_] != nullptr)
     {
-        if (pointer_ && pointer_->next)
+        if ((pointer_ != nullptr) && (pointer_->next != nullptr))
         {
             pointer_ = pointer_->next;
             return *this;
@@ -351,8 +331,10 @@ typename HashTable<Key, T>::iterator& HashTable<Key, T>::iterator::operator++()
     }
 
     index_++;
-    while ((index_ < ht_->capacity_ + 1) && (ht_->array_[index_++] == nullptr));
-    index_--;
+    while ((index_ < ht_->capacity_) && (ht_->array_[index_] == nullptr))
+    {
+        index_++;
+    }
     pointer_ = ht_->array_[index_];
 
     return *this;
@@ -367,49 +349,51 @@ typename HashTable<Key, T>::iterator HashTable<Key, T>::iterator::operator++(int
 }
 
 template<typename Key, typename T>
-bool HashTable<Key, T>::iterator::operator==(const iterator &obj) const
+bool HashTable<Key, T>::iterator::operator==(const iterator& obj) const
 {
     return (index_ == obj.index_) && (pointer_ == obj.pointer_);
 }
 
 template<typename Key, typename T>
-bool HashTable<Key, T>::iterator::operator!=(const iterator &obj) const
+bool HashTable<Key, T>::iterator::operator!=(const iterator& obj) const
 {
     return !(*this == obj);
 }
 
 template<typename Key, typename T>
-Node<std::pair<const Key, T>>& HashTable<Key, T>::iterator::operator*() const
+Node<std::pair<Key, T>>& HashTable<Key, T>::iterator::operator*() const
 {
     return *pointer_;
 }
 
 template<typename Key, typename T>
-Node<std::pair<const Key, T>>* HashTable<Key, T>::iterator::operator->() const
+Node<std::pair<Key, T>>* HashTable<Key, T>::iterator::operator->() const
 {
     return pointer_;
 }
 
 template<typename Key, typename T>
-typename HashTable<Key, T>::iterator HashTable<Key, T>::begin()
+typename HashTable<Key, T>::iterator HashTable<Key, T>::begin() const
 {
     size_t index = 0;
-    while ((index < capacity_) && (array_[index++] == nullptr));
-    index--;
+    while ((index < capacity_) && (array_[index] == nullptr))
+    {
+        index++;
+    }
     return iterator(index, array_[index], this);
 }
 
 template<typename Key, typename T>
-typename HashTable<Key, T>::iterator HashTable<Key, T>::end()
+typename HashTable<Key, T>::iterator HashTable<Key, T>::end() const
 {
     return iterator(capacity_, array_[capacity_], this);
 }
 
 template<typename Key, typename T>
-void HashTable<Key, T>::delete_chain(Node<std::pair<const Key, T>> *node)
+void HashTable<Key, T>::delete_chain(Node<std::pair<Key, T>>* node)
 {
-    Node<std::pair<const Key, T>> *current_node = node;
-    Node<std::pair<const Key, T>> *next_node = nullptr;
+    Node<std::pair<Key, T>> *current_node = node;
+    Node<std::pair<Key, T>> *next_node = nullptr;
 
     while (current_node)
     {

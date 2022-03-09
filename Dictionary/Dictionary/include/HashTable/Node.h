@@ -6,21 +6,21 @@
 namespace puza {
 
 template<typename T>
-struct Node
+struct Node final
 {
     T value;
-    Node *next = nullptr;
+    Node* next = nullptr;
 
     Node() = default;
-    explicit Node(const T &val);
-    Node(const Node &obj);
-    Node(Node &&obj) noexcept;
+    explicit Node(const T& val);
+    Node(const Node& obj);
+    Node(Node&& obj) noexcept;
     ~Node() = default;
 
-    Node &operator=(const Node &obj);
-    Node &operator=(Node &&obj) noexcept;
-    bool operator==(const Node &obj) const;
-    bool operator!=(const Node &obj) const;
+    Node &operator=(const Node& obj);
+    Node &operator=(Node&& obj) noexcept;
+    bool operator==(const Node& obj) const;
+    bool operator!=(const Node& obj) const;
 };
 
 } // namespace puza

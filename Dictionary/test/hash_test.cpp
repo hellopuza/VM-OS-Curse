@@ -13,7 +13,7 @@ protected:
     const size_t MAX_ITER_ = 1000000;
 };
 
-template <>
+template<>
 puza::Hash puza::Hash::operator()(const int& data) const
 {
     return Hash(static_cast<size_t>(data));
@@ -116,7 +116,7 @@ TYPED_TEST(HashTest, Contains)
     }
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

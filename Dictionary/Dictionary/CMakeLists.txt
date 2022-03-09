@@ -14,7 +14,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra -Wpedantic -Wcast-
 
 if(ADD_TESTING)
     list(REMOVE_ITEM DICT_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
-    set(DICT_SOURCES ${DICT_SOURCES} PARENT_SCOPE)
 else()
     add_executable(${EXEC_NAME} ${DICT_SOURCES})
     target_include_directories(${EXEC_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
