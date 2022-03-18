@@ -14,7 +14,7 @@ public:
     void appendWord(const std::string& word);
     void clearText();
     void setMessage(const std::string& message);
-    void print() const;
+    std::string getOutput() const;
 
 private:
     std::vector<std::string> text_;

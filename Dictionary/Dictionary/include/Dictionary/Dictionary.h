@@ -9,6 +9,8 @@ class Dictionary final : public HashTable<std::string, size_t>
 {
 public:
     explicit Dictionary(size_t capacity = DEFAULT_CAPACITY_);
+
+    std::pair<std::string, size_t> findBestWord(const std::string& word);
 };
 
 } // namespace puza

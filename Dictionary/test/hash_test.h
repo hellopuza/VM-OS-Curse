@@ -14,9 +14,9 @@ protected:
 };
 
 template<>
-puza::Hash puza::Hash::operator()(const int& data) const
+puza::Hash& puza::Hash::operator()(const int& data)
 {
-    return Hash(static_cast<size_t>(data));
+    return *this = Hash(static_cast<TYPE>(data));
 }
 
 typedef testing::Types<int> MyTypes;
@@ -114,10 +114,4 @@ TYPED_TEST(HashTest, Contains)
         this->ht_.insert(static_cast<T>(i), 1);
         EXPECT_TRUE(this->ht_.contains(static_cast<T>(i)));
     }
-}
-
-int main(int argc, char* argv[])
-{
-    testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
 }

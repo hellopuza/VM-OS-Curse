@@ -11,15 +11,21 @@ std::string prepare_word(const std::string& word)
         return std::string();
     }
 
-    std::string res;
-    for (const auto& c : word)
+    std::string clean_word = word;
+    while ((clean_word.length() > 0) && !isalpha(clean_word.back()))
     {
-        res.push_back(static_cast<char>(tolower(c)));
+        clean_word.pop_back();
     }
 
-    while ((res.length() > 0) && !isalpha(res.back()))
+    std::string res;
+    for (const auto& c : clean_word)
     {
-        res.pop_back();
+        if (!isalpha(c))
+        {
+            return std::string();
+        }
+        
+        res.push_back(static_cast<char>(tolower(c)));
     }
 
     return res;

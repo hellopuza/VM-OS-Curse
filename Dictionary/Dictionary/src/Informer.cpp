@@ -1,7 +1,6 @@
 #include "Informer.h"
 
 #include <algorithm>
-#include <iostream>
 
 namespace puza {
 
@@ -30,28 +29,30 @@ void Informer::setMessage(const std::string& message)
     message_ = message;
 }
 
-void Informer::print() const
+std::string Informer::getOutput() const
 {
-    std::cout << message_ << "\n\t";
+    std::string output = message_ + "\n\t";
 
     size_t text_len = 0;
     for (const auto& word : text_)
     {
-        std::cout << word;
+        output += word;
         text_len += word.length();
     }
-    std::cout << "\n\t";
+    output += "\n\t";
 
     for (size_t i = 0; i < text_len - text_.back().length(); i++)
     {
-        std::cout << " ";
+        output += " ";
     }
 
     for (size_t i = 0; i < text_.back().length(); i++)
     {
-        std::cout << "~";
+        output += "~";
     }
-    std::cout << "\n\n";
+    output += "\n\n";
+
+    return output;
 }
 
 } // namespace puza

@@ -19,8 +19,8 @@ public:
     enum CorrectionModes
     {
         NO_OUTPUT,
-        OUTPUT,
-        FREQUENCY,
+        WITH_OUTPUT,
+        NO_CORRECTION,
     };
 
     static const size_t DICTIONARY_NUM_ = 20;
@@ -28,12 +28,12 @@ public:
 
 private:
     void parseText();
-    void correctWord(const TextEditor::iterator& text_it, const std::string& word);
 
     HashTable<size_t, Dictionary> dicts_;
     TextEditor text_;
     Informer info_;
-    int mode_;
+    std::string info_output_;
+    int process_mode_;
 };
 
 } // namespace puza

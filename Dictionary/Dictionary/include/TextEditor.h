@@ -17,7 +17,7 @@ public:
 
     class iterator;
 
-    void replace(const iterator& it, const std::string& str);
+    void replace(iterator& it, const std::string& str);
 
     iterator begin() const;
     iterator end() const;
@@ -30,8 +30,7 @@ class TextEditor::iterator
 {
 public:
     iterator(size_t position, const TextEditor* text_ed);
-    iterator& operator++();
-    iterator operator++(int);
+    iterator& next();
     bool operator==(const iterator& obj) const;
     bool operator!=(const iterator& obj) const;
     iterator& operator*();

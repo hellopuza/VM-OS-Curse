@@ -1,8 +1,9 @@
 #include "Dictionary/Corrector.h"
+#include <cstring>
 
 #define PRINT_ERROR(printer, message) \
     (printer).setMessage(message); \
-    (printer).print(); \
+    std::cout << (printer).getOutput(); \
     return -1;
 
 int main(int argc, char* argv[])
@@ -23,16 +24,21 @@ int main(int argc, char* argv[])
                 PRINT_ERROR(info, "Files for the dictionary are required");
             }
 
+            if (strlen(argv[i]) > 2)
+            {
+                PRINT_ERROR(info, "Wrong mode");
+            }
+
             switch(argv[i][1])
             {
             case '\0':
                 corr.setMode(puza::Corrector::NO_OUTPUT);
                 break;
             case 'o':
-                corr.setMode(puza::Corrector::OUTPUT);
+                corr.setMode(puza::Corrector::WITH_OUTPUT);
                 break;
-            case 'f':
-                corr.setMode(puza::Corrector::FREQUENCY);
+            case 's':
+                corr.setMode(puza::Corrector::NO_CORRECTION);
                 break;
             default:
                 PRINT_ERROR(info, "Wrong mode");

@@ -38,8 +38,6 @@ public:
     T* find(const Key& key);
     bool contains(const Key& key) const;
 
-    void print() const;
-
     class iterator;
     iterator begin() const;
     iterator end() const;

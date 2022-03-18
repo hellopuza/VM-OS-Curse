@@ -304,15 +304,6 @@ bool HashTable<Key, T>::contains(const Key& key) const
 }
 
 template<typename Key, typename T>
-void HashTable<Key, T>::print() const
-{
-    for (const auto& it : *this)
-    {
-        std::cout << "{" << it.value.first << "}-{" << it.value.second << "}\n";
-    }
-}
-
-template<typename Key, typename T>
 HashTable<Key, T>::iterator::iterator(size_t index, Node<std::pair<Key, T>>* pointer, const HashTable<Key, T>* ht) :
     index_(index),
     pointer_(pointer), ht_(ht)
