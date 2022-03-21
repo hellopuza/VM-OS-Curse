@@ -6,11 +6,11 @@ namespace puza {
 
 Dictionary::Dictionary(size_t capacity) : HashTable(capacity) {}
 
-std::string Dictionary::findBestWord(const std::string& word, size_t max_lev_dist, bool parallel)
+std::string Dictionary::findBestWord(const std::string& word, size_t max_lev_dist, size_t threads_num)
 {
-    if (parallel)
+    if (threads_num > 1)
     {
-        return findBestWordParallel(word);
+        return findBestWordParallel(word, max_lev_dist, threads_num);
     }
 
     std::string best_word;
@@ -31,19 +31,21 @@ std::string Dictionary::findBestWord(const std::string& word, size_t max_lev_dis
     return best_word;
 }
 
-std::string Dictionary::findBestWordParallel(const std::string& word)
+std::string Dictionary::findBestWordParallel(const std::string& word, size_t max_lev_dist, size_t threads_num)
 {
-    const size_t threads_num = std::thread::hardware_concurrency();
     const size_t piece_len = size() / threads_num;
 
-    const size_t max_levdist = 2;
     struct WordInfo
     {
         std::string best_word;
-        size_t min_lev_dist = max_levdist;
+        size_t min_lev_dist;
         size_t max_freq = 0;
     };
     std::vector<WordInfo> best_words(threads_num);
+    for (auto& winfo : best_words)
+    {
+        winfo.min_lev_dist = max_lev_dist;
+    }
 
     {
         ThreadPool thpool(threads_num);

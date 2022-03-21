@@ -4,6 +4,7 @@
 #include <cstring>
 #include <fstream>
 #include <iostream>
+#include <thread>
 
 namespace puza {
 
@@ -82,11 +83,15 @@ void Corrector::parseText()
             size_t dict_id = word.length() - MIN_WORD_LEN_;
             if (word.length() > MIN_WORD_LEN_)
             {
-                best_words.push_back(dicts_[dict_id - 1].findBestWord(word, MAX_LEV_DIST_, parallel_processing_));
+                best_words.push_back(dicts_[dict_id - 1].findBestWord(word, MAX_LEV_DIST_,
+                    parallel_processing_ ? std::thread::hardware_concurrency() : 1));
             }
 
-            best_words.push_back(dicts_[dict_id].findBestWord(word, MAX_LEV_DIST_, parallel_processing_));
-            best_words.push_back(dicts_[dict_id + 1].findBestWord(word, MAX_LEV_DIST_, parallel_processing_));
+            best_words.push_back(dicts_[dict_id].findBestWord(word, MAX_LEV_DIST_,
+                parallel_processing_ ? std::thread::hardware_concurrency() : 1));
+
+            best_words.push_back(dicts_[dict_id + 1].findBestWord(word, MAX_LEV_DIST_,
+                parallel_processing_ ? std::thread::hardware_concurrency() : 1));
 
             updateOutput(best_words, &text_it);
         }

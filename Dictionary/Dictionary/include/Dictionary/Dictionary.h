@@ -2,7 +2,6 @@
 #define DICTIONARY_DICTIONARY_H
 
 #include "HashTable/HashTable-impl.h"
-#include "ThreadPool.h"
 
 #include <vector>
 
@@ -19,10 +18,10 @@ public:
     Dictionary& operator=(const Dictionary &obj) = default;
     Dictionary& operator=(Dictionary&& obj) noexcept = default;
 
-    std::string findBestWord(const std::string& word, size_t max_lev_dist, bool parallel);
+    std::string findBestWord(const std::string& word, size_t max_lev_dist, size_t threads_num = 1);
 
 private:
-    std::string findBestWordParallel(const std::string& word);
+    std::string findBestWordParallel(const std::string& word, size_t max_lev_dist, size_t threads_num);
 };
 
 } // namespace puza
