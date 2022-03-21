@@ -1,4 +1,4 @@
-#include "StringUtils.h"
+#include "Text/StringUtils.h"
 
 #include <gtest/gtest.h>
 

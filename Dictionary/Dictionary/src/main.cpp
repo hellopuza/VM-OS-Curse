@@ -1,5 +1,7 @@
 #include "Dictionary/Corrector.h"
+
 #include <cstring>
+#include <iostream>
 
 #define PRINT_ERROR(printer, message) \
     (printer).setMessage(message); \
@@ -8,8 +10,10 @@
 
 int main(int argc, char* argv[])
 {
+    const size_t informer_words_num = 16;
+
     puza::Corrector corr;
-    puza::Informer info(16);
+    puza::Informer info(informer_words_num);
 
     bool data_loading = true;
     for (int i = 1; i < argc; i++)
@@ -17,7 +21,7 @@ int main(int argc, char* argv[])
         info.clearText();
         info.appendWord(argv[i]);
 
-        if ((argv[i][0] == '-') && data_loading)
+        if (argv[i][0] == '-')
         {
             if (i == 1)
             {
@@ -33,6 +37,9 @@ int main(int argc, char* argv[])
             {
             case '\0':
                 corr.setMode(puza::Corrector::NO_OUTPUT);
+                break;
+            case 'p':
+                corr.setParallel(true);
                 break;
             case 'o':
                 corr.setMode(puza::Corrector::WITH_OUTPUT);

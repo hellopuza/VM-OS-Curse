@@ -1,16 +1,14 @@
 #ifndef HASHTABLE_HASHTABLE_H
 #define HASHTABLE_HASHTABLE_H
 
-#include "HashTable/Hash.h"
-#include "HashTable/Node-impl.h"
+#include "List/List-impl.h"
 
-#include <algorithm>
 #include <cstdlib>
-#include <utility>
+#include <tuple>
 
 namespace puza {
 
-template<typename Key, typename T>
+template<typename Key, typename T, typename Hash = std::hash<Key>>
 class HashTable
 {
 public:
@@ -32,42 +30,87 @@ public:
     bool insert(const Key& key, const T& value);
     bool insert_or_assign(const Key& key, const T& value);
     bool erase(const Key& key);
-    void swap(HashTable& obj);
 
     T& operator[](const Key& key);
     T* find(const Key& key);
     bool contains(const Key& key) const;
 
     class iterator;
-    iterator begin() const;
-    iterator end() const;
+    class const_iterator;
 
-    static const size_t DEFAULT_CAPACITY_ = 1 << 22;
+    iterator begin();
+    iterator end();
+    const_iterator begin() const;
+    const_iterator end() const;
+
+    static const size_t DEFAULT_CAPACITY_ = 1 << 16;
+
+    struct Node;
 
 private:
-    void delete_chain(Node<std::pair<Key, T>>* node);
+    using list_iter = typename List<Node*>::iterator;
+    using list_const_iter = typename List<Node*>::const_iterator;
 
-    size_t size_;
-    const size_t capacity_;
-    Node<std::pair<Key, T>>** array_;
+    size_t capacity_;
+    List<Node>* array_;
+    List<Node*> iter_list_;
 };
 
-template<typename Key, typename T>
-class HashTable<Key, T>::iterator
+template<typename Key, typename T, typename Hash>
+class HashTable<Key, T, Hash>::iterator final
 {
 public:
-    iterator(size_t index, Node<std::pair<Key, T>>* pointer, const HashTable<Key, T>* ht);
+    iterator() = default;
+    explicit iterator(const list_iter& it);
     iterator& operator++();
     iterator operator++(int);
+    iterator& operator--();
+    iterator operator--(int);
     bool operator==(const iterator& obj) const;
     bool operator!=(const iterator& obj) const;
-    Node<std::pair<Key, T>>& operator*() const;
-    Node<std::pair<Key, T>>* operator->() const;
+    Node& operator*();
+    Node* operator->();
+
+    list_iter it_;
+private:
+};
+
+template<typename Key, typename T, typename Hash>
+class HashTable<Key, T, Hash>::const_iterator final
+{
+public:
+    const_iterator() = default;
+    explicit const_iterator(const list_const_iter& it);
+    const_iterator& operator++();
+    const_iterator operator++(int);
+    const_iterator& operator--();
+    const_iterator operator--(int);
+    bool operator==(const const_iterator& obj) const;
+    bool operator!=(const const_iterator& obj) const;
+    const Node& operator*() const;
+    const Node* operator->() const;
 
 private:
-    size_t index_;
-    Node<std::pair<Key, T>>* pointer_;
-    const HashTable<Key, T>* ht_;
+    list_const_iter it_;
+};
+
+template<typename Key, typename T, typename Hash>
+struct HashTable<Key, T, Hash>::Node final
+{
+    Node() = default;
+    Node(const Key& k, const T& val, const list_iter& iter);
+    Node(const Node& obj);
+    Node(Node&& obj) noexcept = default;
+    ~Node() = default;
+
+    Node& operator=(const Node& obj) = default;
+    Node& operator=(Node&& obj) noexcept = default;
+    bool operator==(const Node& obj) const;
+    bool operator!=(const Node& obj) const;
+
+    Key key;
+    T value;
+    list_iter it;
 };
 
 } // namespace puza

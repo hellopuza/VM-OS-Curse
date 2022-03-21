@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.9)
 
-set(EXEC_NAME Dictionary)
+set(EXEC_NAME dict)
 
 file(GLOB_RECURSE DICT_SOURCES *.cpp)
 set(DICT_SOURCES ${DICT_SOURCES} PARENT_SCOPE)
@@ -9,7 +9,7 @@ set(DICT_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/include PARENT_SCOPE)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra -Wpedantic -Wcast-qual -Wcast-align -Wconversion \
     -Wsign-promo -Wfloat-equal -Wenum-compare -Wold-style-cast -Wredundant-decls -Wsign-conversion -Wnon-virtual-dtor \
-    -Wctor-dtor-privacy -Woverloaded-virtual -Wno-float-equal -O3"
+    -Wctor-dtor-privacy -Woverloaded-virtual -Wno-float-equal -O3 -pthread"
 )
 
 if(ADD_TESTING)
@@ -18,6 +18,10 @@ if(ADD_TESTING)
 else()
     add_executable(${EXEC_NAME} ${DICT_SOURCES})
     target_include_directories(${EXEC_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+    add_custom_target(dictionary
+                        COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/${EXEC_NAME} ${CMAKE_BINARY_DIR}/)
+    add_dependencies(dictionary ${EXEC_NAME})
 
     set_target_properties(${EXEC_NAME} PROPERTIES
         CXX_STANDARD          20

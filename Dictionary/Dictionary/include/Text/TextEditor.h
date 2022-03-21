@@ -1,5 +1,5 @@
-#ifndef TEXTEDITOR_H
-#define TEXTEDITOR_H
+#ifndef TEXT_TEXTEDITOR_H
+#define TEXT_TEXTEDITOR_H
 
 #include <vector>
 #include <string>
@@ -10,7 +10,12 @@ class TextEditor final
 {
 public:
     TextEditor() = default;
+    TextEditor(const TextEditor& obj) = delete;
+    TextEditor(TextEditor&& obj) noexcept = delete;
     ~TextEditor() = default;
+
+    TextEditor& operator=(const TextEditor &obj) = delete;
+    TextEditor& operator=(TextEditor&& obj) noexcept = delete;
 
     bool load(const char* filename);
     void save(const char* filename) const;
@@ -48,4 +53,4 @@ private:
 
 } // namespace puza
 
-#endif // TEXTEDITOR_H
+#endif // TEXT_TEXTEDITOR_H

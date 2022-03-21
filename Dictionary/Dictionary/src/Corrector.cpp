@@ -1,23 +1,22 @@
 #include "Dictionary/Corrector.h"
-#include "StringUtils.h"
+#include "Text/StringUtils.h"
 
 #include <cstring>
 #include <fstream>
-#include <vector>
+#include <iostream>
 
 namespace puza {
 
-template<>
-Hash& Hash::operator()(const size_t& data)
-{
-    return *this = Hash(data);
-}
-
-Corrector::Corrector(size_t dict_num) : dicts_(dict_num), info_(5) {}
+Corrector::Corrector(size_t dict_num) : dicts_(dict_num), info_(INFORMER_WORDS_NUM_) {}
 
 void Corrector::setMode(int mode)
 {
     process_mode_ = mode;
+}
+
+void Corrector::setParallel(bool parallel)
+{
+    parallel_processing_ = parallel;
 }
 
 bool Corrector::load(const char* filename)
@@ -48,8 +47,10 @@ bool Corrector::process(const char* filename)
 {
     if (text_.load(filename))
     {
-        info_output_.clear();
-
+        for (auto& dict : dicts_)
+        {
+            dict.value.makeTraversalArray();
+        }
         parseText();
 
         if (process_mode_ != NO_CORRECTION)
@@ -58,6 +59,7 @@ bool Corrector::process(const char* filename)
         }
 
         std::cout << info_output_;
+        info_output_.clear();
     }
     else
     {
@@ -77,49 +79,54 @@ void Corrector::parseText()
         {
             info_.appendWord(text_it.current_section());
         }
-            
+
         if ((word.length() >= MIN_WORD_LEN_) && !(dicts_[word.length() - MIN_WORD_LEN_].contains(word)))
         {
-            std::string right_word;
-            size_t max_freq = 0;
-            for (int delta_len = -1; delta_len < 2; delta_len++)
+            std::vector<std::string> best_words;
+            size_t dict_id = word.length() - MIN_WORD_LEN_;
+            if (word.length() > MIN_WORD_LEN_)
             {
-                auto word_len = static_cast<int>(word.length() - MIN_WORD_LEN_) + delta_len;
-                std::pair<std::string, size_t> best_word = dicts_[static_cast<size_t>(word_len)].findBestWord(word);
-
-                if (best_word.second > max_freq)
-                {
-                    right_word = best_word.first;
-                    max_freq = best_word.second;
-                }
+                best_words.push_back(dicts_[dict_id - 1].findBestWord(word, MAX_LEV_DIST_, parallel_processing_));
             }
 
-            if (right_word.length() != 0)
-            {
-                if (process_mode_ != NO_CORRECTION)
-                {
-                    text_.replace(text_it, right_word);
-                    if (process_mode_ != NO_OUTPUT)
-                    {
-                        info_.setMessage("Corrected to " + right_word);
-                        info_output_ += info_.getOutput();
-                    }
-                }
-                else
-                {
-                    info_.setMessage("Found best word " + right_word);
-                    info_output_ += info_.getOutput();
-                }
+            best_words.push_back(dicts_[dict_id].findBestWord(word, MAX_LEV_DIST_, parallel_processing_));
+            best_words.push_back(dicts_[dict_id + 1].findBestWord(word, MAX_LEV_DIST_, parallel_processing_));
 
-            }
-            else
+            updateOutput(best_words, &text_it);
+        }
+    }
+}
+
+void Corrector::updateOutput(const std::vector<std::string>& best_words, TextEditor::iterator* text_it)
+{
+    if (best_words[1].length() != 0)
+    {
+        if (process_mode_ != NO_CORRECTION)
+        {
+            text_.replace(*text_it, best_words[1]);
+            if (process_mode_ != NO_OUTPUT)
             {
-                if (process_mode_ != NO_OUTPUT)
-                {
-                    info_.setMessage("Unknown word");
-                    info_output_ += info_.getOutput();
-                }
+                info_.setMessage("Corrected to " + best_words[1]);
+                info_output_ += info_.getOutput();
             }
+        }
+        else
+        {
+            std::string message("Found best words:");
+            for (const auto& word : best_words)
+            {
+                message += " " + word;
+            }
+            info_.setMessage(message);
+            info_output_ += info_.getOutput();
+        }
+    }
+    else
+    {
+        if (process_mode_ != NO_OUTPUT)
+        {
+            info_.setMessage("Unknown word");
+            info_output_ += info_.getOutput();
         }
     }
 }

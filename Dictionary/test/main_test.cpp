@@ -1,4 +1,5 @@
-#include "hash_test.h"
+#include "hash_table_test.h"
+#include "list_test.h"
 #include "string_test.h"
 
 int main(int argc, char* argv[])

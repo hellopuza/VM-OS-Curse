@@ -1,5 +1,5 @@
-#ifndef STRINGUTILS_H
-#define STRINGUTILS_H
+#ifndef TEXT_STRINGUTILS_H
+#define TEXT_STRINGUTILS_H
 
 #include <string>
 
@@ -10,4 +10,4 @@ size_t lev_dist(const std::string& source, const std::string& target);
 
 } // namespace puza
 
-#endif // STRINGUTILS_H
+#endif // TEXT_STRINGUTILS_H

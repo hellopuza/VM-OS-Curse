@@ -1,5 +1,5 @@
-#ifndef INFORMER_H
-#define INFORMER_H
+#ifndef TEXT_INFORMER_H
+#define TEXT_INFORMER_H
 
 #include <vector>
 #include <string>
@@ -10,6 +10,12 @@ class Informer final
 {
 public:
     Informer(size_t max_words_num);
+    Informer(const Informer& obj) = delete;
+    Informer(Informer&& obj) noexcept = delete;
+    ~Informer() = default;
+
+    Informer& operator=(const Informer &obj) = delete;
+    Informer& operator=(Informer&& obj) noexcept = delete;
 
     void appendWord(const std::string& word);
     void clearText();
@@ -24,4 +30,4 @@ private:
 
 } // namespace puza
 
-#endif // INFORMER_H
+#endif // TEXT_INFORMER_H

@@ -19,6 +19,11 @@ set(EXEC_NAME dict_test)
 add_executable(${EXEC_NAME} ${DICT_TEST_SOURCES} ${DICT_SOURCES})
 target_include_directories(${EXEC_NAME} PUBLIC ${DICT_INCLUDE})
 
+set_target_properties(${EXEC_NAME} PROPERTIES
+    CXX_STANDARD          20
+    CXX_STANDARD_REQUIRED ON
+)
+
 add_custom_target(run_${EXEC_NAME}
                   COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${EXEC_NAME})
 add_dependencies(run_${EXEC_NAME} ${EXEC_NAME})
