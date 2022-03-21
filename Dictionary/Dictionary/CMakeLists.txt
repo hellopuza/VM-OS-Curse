@@ -19,8 +19,7 @@ else()
     add_executable(${EXEC_NAME} ${DICT_SOURCES})
     target_include_directories(${EXEC_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-    add_custom_target(dictionary
-                        COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/${EXEC_NAME} ${CMAKE_BINARY_DIR}/)
+    add_custom_target(dictionary COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/${EXEC_NAME} ${CMAKE_BINARY_DIR}/)
     add_dependencies(dictionary ${EXEC_NAME})
 
     set_target_properties(${EXEC_NAME} PROPERTIES

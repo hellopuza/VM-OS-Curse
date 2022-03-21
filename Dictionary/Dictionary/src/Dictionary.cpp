@@ -57,34 +57,41 @@ std::string Dictionary::findBestWordParallel(const std::string& word, size_t max
     {
         ThreadPool thpool(threads_num);
 
-        auto check = [&](const Node& node, WordInfo& winfo) -> void
+        auto check = [&](const Node* node, WordInfo* winfo) -> void
         {
-            size_t ld = lev_dist(word, node.key);
-            if ((ld <= max_lev_dist) && (node.value > winfo.max_freq) && (ld <= winfo.min_lev_dist))
+            size_t ld = lev_dist(word, node->key);
+            if ((ld <= max_lev_dist) && (node->value > winfo->max_freq) && (ld <= winfo->min_lev_dist))
             {
-                winfo.best_word = node.key;
-                winfo.min_lev_dist = ld;
-                winfo.max_freq = node.value;
+                winfo->best_word = node->key;
+                winfo->min_lev_dist = ld;
+                winfo->max_freq = node->value;
             }
         };
 
-        auto process = [&](size_t begin, WordInfo& winfo) -> void
+        auto process = [&](size_t begin, WordInfo* winfo) -> void
         {
-            for (size_t i = begin; (i + begin < size()) && (i < piece_len); i++)
+            for (size_t i = begin; (i < size()) && (i - begin < piece_len); i++)
             {
-                check(*elements_[i], winfo);
+                check(elements_[i], winfo);
             }
         };
 
         for (size_t i = 0; i < threads_num; i++)
         {
-            thpool.create_task(process, i, best_words[i]);
+            thpool.create_task(process, i * piece_len, &best_words[i]);
         }
     }
 
     WordInfo winfo;
+    bool finding_word = true;
     for (size_t i = 0; i < threads_num; i++)
     {
+        if (finding_word && !best_words[i].best_word.empty())
+        {
+            winfo = best_words[i];
+            finding_word = false;
+        }
+
         size_t ld = lev_dist(winfo.best_word, best_words[i].best_word);
         if ((ld <= max_lev_dist) && (best_words[i].max_freq > winfo.max_freq) && (ld <= winfo.min_lev_dist))
         {
