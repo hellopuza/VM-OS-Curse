@@ -6,15 +6,6 @@ namespace puza {
 
 Dictionary::Dictionary(size_t capacity) : HashTable(capacity) {}
 
-void Dictionary::makeTraversalArray()
-{
-    elements_.clear();
-    for (auto& dict_it : *this)
-    {
-        elements_.push_back(&dict_it);
-    }
-}
-
 std::string Dictionary::findBestWord(const std::string& word, size_t max_lev_dist, bool parallel)
 {
     if (parallel)
@@ -72,7 +63,7 @@ std::string Dictionary::findBestWordParallel(const std::string& word)
         {
             for (size_t i = begin; (i < size()) && (i - begin < piece_len); i++)
             {
-                check(elements_[i], winfo);
+                check(iter_vec_[i], winfo);
             }
         };
 

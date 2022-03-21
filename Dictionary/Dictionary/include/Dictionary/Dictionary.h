@@ -20,12 +20,9 @@ public:
     Dictionary& operator=(Dictionary&& obj) noexcept = default;
 
     std::string findBestWord(const std::string& word, size_t max_lev_dist, bool parallel);
-    void makeTraversalArray();
 
 private:
     std::string findBestWordParallel(const std::string& word);
-
-    std::vector<Node*> elements_;
 };
 
 } // namespace puza

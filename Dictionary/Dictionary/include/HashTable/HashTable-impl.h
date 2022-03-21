@@ -12,7 +12,7 @@ HashTable<Key, T, Hash>::HashTable(size_t capacity) : capacity_(capacity)
 }
 
 template<typename Key, typename T, typename Hash>
-HashTable<Key, T, Hash>::HashTable(const HashTable& obj) : capacity_(obj.capacity_), iter_list_(obj.iter_list_)
+HashTable<Key, T, Hash>::HashTable(const HashTable& obj) : capacity_(obj.capacity_), iter_vec_(obj.iter_vec_)
 {
     array_ = new List<Node> [capacity_];
 
@@ -24,7 +24,7 @@ HashTable<Key, T, Hash>::HashTable(const HashTable& obj) : capacity_(obj.capacit
 
 template<typename Key, typename T, typename Hash>
 HashTable<Key, T, Hash>::HashTable(HashTable&& obj) noexcept :
-    capacity_(obj.capacity_), array_(obj.array_), iter_list_(std::move(obj.iter_list_))
+    capacity_(obj.capacity_), array_(obj.array_), iter_vec_(std::move(obj.iter_vec_))
 {
     obj.array_ = nullptr;
 }
@@ -44,7 +44,7 @@ HashTable<Key, T, Hash>& HashTable<Key, T, Hash>::operator=(const HashTable& obj
     delete[] array_;
 
     capacity_ = obj.capacity_;
-    iter_list_ = obj.iter_list_;
+    iter_vec_ = obj.iter_vec_;
     array_ = new List<Node> [capacity_];
 
     for (size_t i = 0; i < capacity_; i++)
@@ -65,7 +65,7 @@ HashTable<Key, T, Hash>& HashTable<Key, T, Hash>::operator=(HashTable&& obj) noe
 
     capacity_ = obj.capacity_;
     array_ = obj.array_;
-    iter_list_ = std::move(obj.iter_list_);
+    iter_vec_ = std::move(obj.iter_vec_);
     obj.array_ = nullptr;
 
     return *this;
@@ -98,13 +98,13 @@ bool HashTable<Key, T, Hash>::operator!=(const HashTable& obj) const
 template<typename Key, typename T, typename Hash>
 bool HashTable<Key, T, Hash>::empty() const
 {
-    return iter_list_.empty();
+    return iter_vec_.empty();
 }
 
 template<typename Key, typename T, typename Hash>
 size_t HashTable<Key, T, Hash>::size() const
 {
-    return iter_list_.size();
+    return iter_vec_.size();
 }
 
 template<typename Key, typename T, typename Hash>
@@ -116,7 +116,7 @@ size_t HashTable<Key, T, Hash>::capacity() const
 template<typename Key, typename T, typename Hash>
 void HashTable<Key, T, Hash>::clear()
 {
-    iter_list_.clear();
+    iter_vec_.clear();
     for (size_t i = 0; i < capacity_; i++)
     {
         array_[i].clear();
@@ -134,9 +134,9 @@ bool HashTable<Key, T, Hash>::insert(const Key& key, const T& value)
             return false;
     }
 
-    iter_list_.push_back(nullptr);
-    array_[ind].push_back(Node(key, value, iter_list_.end_iter()));
-    iter_list_.back() = &array_[ind].back();
+    iter_vec_.push_back(nullptr);
+    array_[ind].push_back(Node(key, value));
+    iter_vec_.back() = &array_[ind].back();
 
     return true;
 }
@@ -155,29 +155,11 @@ bool HashTable<Key, T, Hash>::insert_or_assign(const Key& key, const T& value)
         }
     }
 
-    iter_list_.push_back(nullptr);
-    array_[ind].push_back(Node(key, value, iter_list_.end_iter()));
-    iter_list_.back() = &array_[ind].back();
+    iter_vec_.push_back(nullptr);
+    array_[ind].push_back(Node(key, value));
+    iter_vec_.back() = &array_[ind].back();
 
     return true;
-}
-
-template<typename Key, typename T, typename Hash>
-bool HashTable<Key, T, Hash>::erase(const Key& key)
-{
-    size_t ind = Hash()(key) % capacity_;
-
-    for (auto it = array_[ind].begin(), ite = array_[ind].end(); it != ite; ++it)
-    {
-        if (it->key == key)
-        {
-            iter_list_.erase(it->it);
-            array_[ind].erase(it);
-            return true;
-        }
-    }
-
-    return false;
 }
 
 template<typename Key, typename T, typename Hash>
@@ -191,9 +173,9 @@ T& HashTable<Key, T, Hash>::operator[](const Key& key)
             return it.value;
     }
 
-    iter_list_.push_back(nullptr);
-    array_[ind].push_back(Node(key, T(), iter_list_.end_iter()));
-    iter_list_.back() = &array_[ind].back();
+    iter_vec_.push_back(nullptr);
+    array_[ind].push_back(Node(key, T()));
+    iter_vec_.back() = &array_[ind].back();
 
     return array_[ind].back().value;
 }
@@ -229,29 +211,29 @@ bool HashTable<Key, T, Hash>::contains(const Key& key) const
 template<typename Key, typename T, typename Hash>
 typename HashTable<Key, T, Hash>::iterator HashTable<Key, T, Hash>::begin()
 {
-    return iterator(iter_list_.begin());
+    return iterator(iter_vec_.begin());
 }
 
 template<typename Key, typename T, typename Hash>
 typename HashTable<Key, T, Hash>::iterator HashTable<Key, T, Hash>::end()
 {
-    return iterator(iter_list_.end());
+    return iterator(iter_vec_.end());
 }
 
 template<typename Key, typename T, typename Hash>
 typename HashTable<Key, T, Hash>::const_iterator HashTable<Key, T, Hash>::begin() const
 {
-    return iterator(iter_list_.begin());
+    return iterator(iter_vec_.begin());
 }
 
 template<typename Key, typename T, typename Hash>
 typename HashTable<Key, T, Hash>::const_iterator HashTable<Key, T, Hash>::end() const
 {
-    return iterator(iter_list_.end());
+    return iterator(iter_vec_.end());
 }
 
 template<typename Key, typename T, typename Hash>
-HashTable<Key, T, Hash>::iterator::iterator(const list_iter& it) : it_(it) {}
+HashTable<Key, T, Hash>::iterator::iterator(const vec_iter& it) : it_(it) {}
 
 template<typename Key, typename T, typename Hash>
 typename HashTable<Key, T, Hash>::iterator& HashTable<Key, T, Hash>::iterator::operator++()
@@ -308,7 +290,7 @@ typename HashTable<Key, T, Hash>::Node* HashTable<Key, T, Hash>::iterator::opera
 }
 
 template<typename Key, typename T, typename Hash>
-HashTable<Key, T, Hash>::const_iterator::const_iterator(const list_const_iter& it) : it_(it) {}
+HashTable<Key, T, Hash>::const_iterator::const_iterator(const vec_const_iter& it) : it_(it) {}
 
 template<typename Key, typename T, typename Hash>
 typename HashTable<Key, T, Hash>::const_iterator& HashTable<Key, T, Hash>::const_iterator::operator++()
@@ -365,13 +347,13 @@ const typename HashTable<Key, T, Hash>::Node* HashTable<Key, T, Hash>::const_ite
 }
 
 template<typename Key, typename T, typename Hash>
-HashTable<Key, T, Hash>::Node::Node(const Key& k, const T& val, const list_iter& iter) :
-    key(k), value(val), it(iter)
+HashTable<Key, T, Hash>::Node::Node(const Key& k, const T& val) :
+    key(k), value(val)
 {}
 
 template<typename Key, typename T, typename Hash>
 HashTable<Key, T, Hash>::Node::Node(const Node& obj) :
-    key(obj.key), value(obj.value), it(obj.it)
+    key(obj.key), value(obj.value)
 {}
 
 template<typename Key, typename T, typename Hash>

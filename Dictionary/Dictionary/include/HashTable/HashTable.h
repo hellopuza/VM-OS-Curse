@@ -5,6 +5,7 @@
 
 #include <cstdlib>
 #include <functional>
+#include <vector>
 
 namespace puza {
 
@@ -29,7 +30,6 @@ public:
 
     bool insert(const Key& key, const T& value);
     bool insert_or_assign(const Key& key, const T& value);
-    bool erase(const Key& key);
 
     T& operator[](const Key& key);
     T* find(const Key& key);
@@ -48,12 +48,14 @@ public:
     struct Node;
 
 private:
-    using list_iter = typename List<Node*>::iterator;
-    using list_const_iter = typename List<Node*>::const_iterator;
+    using vec_iter = typename std::vector<Node*>::iterator;
+    using vec_const_iter = typename std::vector<Node*>::const_iterator;
 
     size_t capacity_;
     List<Node>* array_;
-    List<Node*> iter_list_;
+
+protected:
+    std::vector<Node*> iter_vec_;
 };
 
 template<typename Key, typename T, typename Hash>
@@ -61,7 +63,7 @@ class HashTable<Key, T, Hash>::iterator final
 {
 public:
     iterator() = default;
-    explicit iterator(const list_iter& it);
+    explicit iterator(const vec_iter& it);
     iterator& operator++();
     iterator operator++(int);
     iterator& operator--();
@@ -72,7 +74,7 @@ public:
     Node* operator->();
 
 private:
-    list_iter it_;
+    vec_iter it_;
 };
 
 template<typename Key, typename T, typename Hash>
@@ -80,7 +82,7 @@ class HashTable<Key, T, Hash>::const_iterator final
 {
 public:
     const_iterator() = default;
-    explicit const_iterator(const list_const_iter& it);
+    explicit const_iterator(const vec_const_iter& it);
     const_iterator& operator++();
     const_iterator operator++(int);
     const_iterator& operator--();
@@ -91,14 +93,14 @@ public:
     const Node* operator->() const;
 
 private:
-    list_const_iter it_;
+    vec_const_iter it_;
 };
 
 template<typename Key, typename T, typename Hash>
 struct HashTable<Key, T, Hash>::Node final
 {
     Node() = default;
-    Node(const Key& k, const T& val, const list_iter& iter);
+    Node(const Key& k, const T& val);
     Node(const Node& obj);
     Node(Node&& obj) noexcept = default;
     ~Node() = default;
@@ -110,7 +112,6 @@ struct HashTable<Key, T, Hash>::Node final
 
     Key key;
     T value;
-    list_iter it;
 };
 
 } // namespace puza

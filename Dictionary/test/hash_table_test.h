@@ -181,23 +181,6 @@ TEST(HashTableTest, InsertOrAssign)
     }
 }
 
-TEST(HashTableTest, Erase)
-{
-    MyHT ht;
-    for (size_t i = 0; i < MAX_ITER; i++)
-    {
-         ht.insert(std::to_string(i), 2 * i);
-    }
-
-    for (size_t i = 0; i < MAX_ITER; i++)
-    {
-        EXPECT_TRUE(ht.size() == MAX_ITER - i);
-
-        ht.erase(std::to_string(i));
-        EXPECT_FALSE(ht.contains(std::to_string(i)));
-    }
-}
-
 TEST(HashTableTest, AccesOperator)
 {
     MyHT ht;

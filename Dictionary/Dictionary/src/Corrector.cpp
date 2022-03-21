@@ -47,13 +47,6 @@ bool Corrector::process(const char* filename)
 {
     if (text_.load(filename))
     {
-        if (parallel_processing_)
-        {
-            for (auto& dict : dicts_)
-            {
-                dict.value.makeTraversalArray();
-            }
-        }
         parseText();
 
         if (process_mode_ != NO_CORRECTION)
