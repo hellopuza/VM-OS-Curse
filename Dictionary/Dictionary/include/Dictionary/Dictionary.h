@@ -23,7 +23,7 @@ public:
     void makeTraversalArray();
 
 private:
-    std::string findBestWordParallel(const std::string& word, size_t max_lev_dist);
+    std::string findBestWordParallel(const std::string& word);
 
     std::vector<Node*> elements_;
 };

@@ -19,7 +19,7 @@ std::string Dictionary::findBestWord(const std::string& word, size_t max_lev_dis
 {
     if (parallel)
     {
-        return findBestWordParallel(word, max_lev_dist);
+        return findBestWordParallel(word);
     }
 
     std::string best_word;
@@ -29,7 +29,7 @@ std::string Dictionary::findBestWord(const std::string& word, size_t max_lev_dis
     for (const auto& dict_it : *this)
     {
         size_t ld = lev_dist(word, dict_it.key);
-        if ((ld < max_lev_dist) && (dict_it.value > max_freq) && (ld <= min_lev_dist))
+        if ((ld <= min_lev_dist) && (dict_it.value > max_freq))
         {
             max_freq = dict_it.value;
             best_word = dict_it.key;
@@ -40,12 +40,12 @@ std::string Dictionary::findBestWord(const std::string& word, size_t max_lev_dis
     return best_word;
 }
 
-std::string Dictionary::findBestWordParallel(const std::string& word, size_t max_lev_dist)
+std::string Dictionary::findBestWordParallel(const std::string& word)
 {
     const size_t threads_num = std::thread::hardware_concurrency();
     const size_t piece_len = size() / threads_num;
 
-    const size_t max_levdist = 10;
+    const size_t max_levdist = 2;
     struct WordInfo
     {
         std::string best_word;
@@ -60,7 +60,7 @@ std::string Dictionary::findBestWordParallel(const std::string& word, size_t max
         auto check = [&](const Node* node, WordInfo* winfo) -> void
         {
             size_t ld = lev_dist(word, node->key);
-            if ((ld <= max_lev_dist) && (node->value > winfo->max_freq) && (ld <= winfo->min_lev_dist))
+            if ((ld <= winfo->min_lev_dist) && (node->value > winfo->max_freq))
             {
                 winfo->best_word = node->key;
                 winfo->min_lev_dist = ld;
@@ -93,7 +93,7 @@ std::string Dictionary::findBestWordParallel(const std::string& word, size_t max
         }
 
         size_t ld = lev_dist(winfo.best_word, best_words[i].best_word);
-        if ((ld <= max_lev_dist) && (best_words[i].max_freq > winfo.max_freq) && (ld <= winfo.min_lev_dist))
+        if ((ld <= winfo.min_lev_dist) && (best_words[i].max_freq > winfo.max_freq))
         {
             winfo.best_word = best_words[i].best_word;
             winfo.min_lev_dist = ld;
