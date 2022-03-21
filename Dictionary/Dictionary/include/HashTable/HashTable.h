@@ -4,7 +4,7 @@
 #include "List/List-impl.h"
 
 #include <cstdlib>
-#include <tuple>
+#include <functional>
 
 namespace puza {
 
@@ -71,8 +71,8 @@ public:
     Node& operator*();
     Node* operator->();
 
-    list_iter it_;
 private:
+    list_iter it_;
 };
 
 template<typename Key, typename T, typename Hash>

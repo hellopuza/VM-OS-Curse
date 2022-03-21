@@ -4,7 +4,6 @@
 #include "Dictionary/Dictionary.h"
 #include "Text/TextEditor.h"
 #include "Text/Informer.h"
-#include <vector>
 
 namespace puza {
 

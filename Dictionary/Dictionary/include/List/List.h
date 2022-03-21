@@ -45,12 +45,12 @@ public:
     const_iterator end() const;
     const_iterator end_iter() const;
 
-    struct Node;
-    Node* front_ = nullptr;
-    Node* back_ = nullptr;
 private:
+    struct Node;
 
     size_t size_;
+    Node* front_ = nullptr;
+    Node* back_ = nullptr;
 };
 
 template<typename T>
@@ -68,10 +68,10 @@ public:
     T& operator*();
     T* operator->();
 
-    Node* ptr_ = nullptr;
 private:
     friend class List<T>;
 
+    Node* ptr_ = nullptr;
 };
 
 template<typename T>
