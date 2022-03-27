@@ -4,7 +4,7 @@ namespace puza {
 
 ThreadPool::ThreadPool(size_t threads_num) : stop_(false)
 {
-    for(size_t i = 0; i < threads_num; i++)
+    for (size_t i = 0; i < threads_num; i++)
     {
         workers_.emplace_back([this] {
             while (true)
@@ -13,7 +13,7 @@ ThreadPool::ThreadPool(size_t threads_num) : stop_(false)
 
                 {
                     std::unique_lock<std::mutex> lock(this->queue_mutex_);
-                    this->condition_.wait(lock, [this]{ return this->stop_ || !this->tasks_.empty(); });
+                    this->continuation_.wait(lock, [this]{ return this->stop_ || !this->tasks_.empty(); });
 
                     if (this->stop_ && this->tasks_.empty())
                     {
@@ -32,15 +32,23 @@ ThreadPool::ThreadPool(size_t threads_num) : stop_(false)
 
 ThreadPool::~ThreadPool()
 {
+    join();
+}
+
+void ThreadPool::join()
+{
     {
         std::unique_lock<std::mutex> lock(queue_mutex_);
         stop_ = true;
     }
 
-    condition_.notify_all();
+    continuation_.notify_all();
     for (auto &worker: workers_)
     {
-        worker.join();
+        if (worker.joinable())
+        {
+            worker.join();
+        }
     }
 }
 

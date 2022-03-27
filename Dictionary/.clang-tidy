@@ -16,6 +16,7 @@ Checks: >
   -readability-named-parameter,
   -readability-redundant-declaration,
   -readability-function-cognitive-complexity,
+  -readability-magic-numbers,
   -bugprone-narrowing-conversions
 
 WarningsAsErrors: "*"

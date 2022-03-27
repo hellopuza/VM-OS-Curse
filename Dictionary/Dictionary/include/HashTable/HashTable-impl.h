@@ -223,13 +223,13 @@ typename HashTable<Key, T, Hash>::iterator HashTable<Key, T, Hash>::end()
 template<typename Key, typename T, typename Hash>
 typename HashTable<Key, T, Hash>::const_iterator HashTable<Key, T, Hash>::begin() const
 {
-    return iterator(iter_vec_.begin());
+    return const_iterator(iter_vec_.begin());
 }
 
 template<typename Key, typename T, typename Hash>
 typename HashTable<Key, T, Hash>::const_iterator HashTable<Key, T, Hash>::end() const
 {
-    return iterator(iter_vec_.end());
+    return const_iterator(iter_vec_.end());
 }
 
 template<typename Key, typename T, typename Hash>

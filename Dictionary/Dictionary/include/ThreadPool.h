@@ -15,7 +15,7 @@ class ThreadPool final
 public:
     using Task = std::function<void()>;
 
-    explicit ThreadPool(size_t threads_num);
+    explicit ThreadPool(size_t threads_num = 1);
     ThreadPool(const ThreadPool&) = delete;
     ThreadPool(ThreadPool&&) = delete;
     ThreadPool& operator=(const ThreadPool &) = delete;
@@ -24,13 +24,14 @@ public:
 
     template<typename Func, typename... Args>
     void create_task(Func&& func, Args&&... args);
+    void join();
 
- private:
+private:
     std::vector<std::thread> workers_;
     std::queue<Task> tasks_;
 
     std::mutex queue_mutex_;
-    std::condition_variable condition_;
+    std::condition_variable continuation_;
     bool stop_;
 };
 
@@ -43,8 +44,7 @@ void ThreadPool::create_task(Func&& func, Args&&... args)
         std::unique_lock<std::mutex> lock(queue_mutex_);
         tasks_.emplace(std::move(task));
     }
-
-    condition_.notify_one();
+    continuation_.notify_one();
 }
 
 } // namespace puza

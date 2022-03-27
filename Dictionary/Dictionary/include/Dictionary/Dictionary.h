@@ -18,10 +18,15 @@ public:
     Dictionary& operator=(const Dictionary &obj) = default;
     Dictionary& operator=(Dictionary&& obj) noexcept = default;
 
-    std::string findBestWord(const std::string& word, size_t max_lev_dist, size_t threads_num = 1);
+    void setThreadsNum(size_t threads_num);
+    size_t getThreadsNum() const;
+
+    std::string findBestWord(const std::string& word, size_t max_lev_dist) const;
 
 private:
-    std::string findBestWordParallel(const std::string& word, size_t max_lev_dist, size_t threads_num);
+    std::string findBestWordParallel(const std::string& word, size_t max_lev_dist) const;
+
+    size_t threads_num_ = 1;
 };
 
 } // namespace puza

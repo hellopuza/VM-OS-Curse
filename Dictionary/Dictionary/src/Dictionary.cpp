@@ -6,11 +6,21 @@ namespace puza {
 
 Dictionary::Dictionary(size_t capacity) : HashTable(capacity) {}
 
-std::string Dictionary::findBestWord(const std::string& word, size_t max_lev_dist, size_t threads_num)
+void Dictionary::setThreadsNum(size_t threads_num)
 {
-    if (threads_num > 1)
+    threads_num_ = threads_num;
+}
+
+size_t Dictionary::getThreadsNum() const
+{
+    return threads_num_;
+}
+
+std::string Dictionary::findBestWord(const std::string& word, size_t max_lev_dist) const
+{
+    if (threads_num_ > 1)
     {
-        return findBestWordParallel(word, max_lev_dist, threads_num);
+        return findBestWordParallel(word, max_lev_dist);
     }
 
     std::string best_word;
@@ -31,9 +41,9 @@ std::string Dictionary::findBestWord(const std::string& word, size_t max_lev_dis
     return best_word;
 }
 
-std::string Dictionary::findBestWordParallel(const std::string& word, size_t max_lev_dist, size_t threads_num)
+std::string Dictionary::findBestWordParallel(const std::string& word, size_t max_lev_dist) const
 {
-    const size_t piece_len = size() / threads_num;
+    const size_t piece_len = size() / threads_num_;
 
     struct WordInfo
     {
@@ -41,43 +51,41 @@ std::string Dictionary::findBestWordParallel(const std::string& word, size_t max
         size_t min_lev_dist;
         size_t max_freq = 0;
     };
-    std::vector<WordInfo> best_words(threads_num);
+    std::vector<WordInfo> best_words(threads_num_);
     for (auto& winfo : best_words)
     {
         winfo.min_lev_dist = max_lev_dist;
     }
 
+    auto check = [&](const Node* node, WordInfo* winfo) -> void
     {
-        ThreadPool thpool(threads_num);
-
-        auto check = [&](const Node* node, WordInfo* winfo) -> void
+        size_t ld = lev_dist(word, node->key);
+        if ((ld <= winfo->min_lev_dist) && (node->value > winfo->max_freq))
         {
-            size_t ld = lev_dist(word, node->key);
-            if ((ld <= winfo->min_lev_dist) && (node->value > winfo->max_freq))
-            {
-                winfo->best_word = node->key;
-                winfo->min_lev_dist = ld;
-                winfo->max_freq = node->value;
-            }
-        };
-
-        auto process = [&](size_t begin, WordInfo* winfo) -> void
-        {
-            for (size_t i = begin; (i < size()) && (i - begin < piece_len); i++)
-            {
-                check(iter_vec_[i], winfo);
-            }
-        };
-
-        for (size_t i = 0; i < threads_num; i++)
-        {
-            thpool.create_task(process, i * piece_len, &best_words[i]);
+            winfo->best_word = node->key;
+            winfo->min_lev_dist = ld;
+            winfo->max_freq = node->value;
         }
+    };
+
+    auto process = [&](size_t begin, WordInfo* winfo) -> void
+    {
+        for (size_t i = begin; (i < size()) && (i - begin < piece_len); i++)
+        {
+            check(iter_vec_[i], winfo);
+        }
+    };
+
+    ThreadPool thpool(threads_num_);
+    for (size_t i = 0; i < threads_num_; i++)
+    {
+        thpool.create_task(process, i * piece_len, &best_words[i]);
     }
+    thpool.join();
 
     WordInfo winfo;
     bool finding_word = true;
-    for (size_t i = 0; i < threads_num; i++)
+    for (size_t i = 0; i < threads_num_; i++)
     {
         if (finding_word && !best_words[i].best_word.empty())
         {

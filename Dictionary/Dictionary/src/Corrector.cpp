@@ -48,6 +48,11 @@ bool Corrector::process(const char* filename)
 {
     if (text_.load(filename))
     {
+        for (auto& dict : dicts_)
+        {
+            dict.value.setThreadsNum(parallel_processing_ ? std::thread::hardware_concurrency() : 1);
+        }
+
         parseText();
 
         if (process_mode_ != NO_CORRECTION)
@@ -83,15 +88,11 @@ void Corrector::parseText()
             size_t dict_id = word.length() - MIN_WORD_LEN_;
             if (word.length() > MIN_WORD_LEN_)
             {
-                best_words.push_back(dicts_[dict_id - 1].findBestWord(word, MAX_LEV_DIST_,
-                    parallel_processing_ ? std::thread::hardware_concurrency() : 1));
+                best_words.push_back(dicts_[dict_id - 1].findBestWord(word, MAX_LEV_DIST_));
             }
 
-            best_words.push_back(dicts_[dict_id].findBestWord(word, MAX_LEV_DIST_,
-                parallel_processing_ ? std::thread::hardware_concurrency() : 1));
-
-            best_words.push_back(dicts_[dict_id + 1].findBestWord(word, MAX_LEV_DIST_,
-                parallel_processing_ ? std::thread::hardware_concurrency() : 1));
+            best_words.push_back(dicts_[dict_id].findBestWord(word, MAX_LEV_DIST_));
+            best_words.push_back(dicts_[dict_id + 1].findBestWord(word, MAX_LEV_DIST_));
 
             updateOutput(best_words, &text_it);
         }
