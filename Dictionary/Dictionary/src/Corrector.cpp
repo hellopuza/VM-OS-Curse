@@ -1,10 +1,10 @@
 #include "Dictionary/Corrector.h"
 #include "Text/StringUtils.h"
+#include "ThreadPool.h"
 
 #include <cstring>
 #include <fstream>
 #include <iostream>
-#include <thread>
 
 namespace puza {
 
@@ -20,7 +20,7 @@ void Corrector::setParallel(bool parallel)
     parallel_processing_ = parallel;
 }
 
-bool Corrector::load(const char* filename)
+bool Corrector::load_text(const char* filename)
 {
     std::ifstream file(filename);
     if (file.is_open())
@@ -33,6 +33,48 @@ bool Corrector::load(const char* filename)
             if (word.length() >= MIN_WORD_LEN_)
             {
                 dicts_[word.length() - MIN_WORD_LEN_][word]++;
+            }
+        }
+    }
+    else
+    {
+        return false;
+    }
+
+    return true;
+}
+
+bool Corrector::load_data(const char* filename)
+{
+    std::ifstream file(filename);
+    if (file.is_open())
+    {
+        std::string word;
+        size_t freq;
+        while (!file.eof())
+        {
+            file >> word >> freq;
+            dicts_[word.length() - MIN_WORD_LEN_][word] += freq;
+        }
+    }
+    else
+    {
+        return false;
+    }
+
+    return true;
+}
+
+bool Corrector::save_data(const char* filename) const
+{
+    std::ofstream file(filename, std::ofstream::out);
+    if (file.is_open())
+    {
+        for (const auto& dict : dicts_)
+        {
+            for (const auto& node : dict.value)
+            {
+                file << node.key << " " << node.value << "\n";
             }
         }
     }
@@ -84,15 +126,24 @@ void Corrector::parseText()
 
         if ((word.length() >= MIN_WORD_LEN_) && !(dicts_[word.length() - MIN_WORD_LEN_].contains(word)))
         {
-            std::vector<std::string> best_words;
+            const size_t dicts_num = 3;
+            std::vector<std::string> best_words(dicts_num);
             size_t dict_id = word.length() - MIN_WORD_LEN_;
+
+            auto process = [&](size_t vec_ind, size_t dict_ind) -> void
+            {
+                best_words[vec_ind] = dicts_[dict_ind].findBestWord(word, MAX_LEV_DIST_);
+            };
+
+            ThreadPool thpool(dicts_num);
             if (word.length() > MIN_WORD_LEN_)
             {
-                best_words.push_back(dicts_[dict_id - 1].findBestWord(word, MAX_LEV_DIST_));
+                thpool.create_task(process, 0, dict_id - 1);
             }
 
-            best_words.push_back(dicts_[dict_id].findBestWord(word, MAX_LEV_DIST_));
-            best_words.push_back(dicts_[dict_id + 1].findBestWord(word, MAX_LEV_DIST_));
+            thpool.create_task(process, 1, dict_id);
+            thpool.create_task(process, 2, dict_id + 1);
+            thpool.join();
 
             updateOutput(best_words, &text_it);
         }

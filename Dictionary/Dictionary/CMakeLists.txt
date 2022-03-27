@@ -12,7 +12,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra -Wpedantic -Wcast-
     -Wctor-dtor-privacy -Woverloaded-virtual -Wno-float-equal -O3 -pthread"
 )
 
-if(ADD_TESTING)
+if(ADD_TESTING OR ADD_BENCHMARK)
     list(REMOVE_ITEM DICT_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
     set(DICT_SOURCES ${DICT_SOURCES} PARENT_SCOPE)
 else()

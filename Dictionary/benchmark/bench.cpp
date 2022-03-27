@@ -6,12 +6,11 @@
 #include <fstream>
 #include <iostream>
 
-constexpr size_t ITER_NUM = 100;
-constexpr size_t MAX_THREADS_NUM = 1 << 10;
+constexpr size_t ITER_NUM = 10;
+constexpr size_t MAX_THREADS_NUM = 1 << 6;
 
-class TestClass
+struct TestClass
 {
-public:
     TestClass()
     {
         std::string filename("words.txt");
@@ -34,7 +33,8 @@ public:
 
     void findWord(const std::string& word, size_t threads_num)
     {
-        dict_.findBestWord(word, 2, threads_num);
+        dict_.setThreadsNum(threads_num);
+        dict_.findBestWord(word, 2);
     }
 
 private:

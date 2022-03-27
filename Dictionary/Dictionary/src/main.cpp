@@ -15,15 +15,43 @@ int main(int argc, char* argv[])
     puza::Corrector corr;
     puza::Informer info(informer_words_num);
 
-    bool data_loading = true;
+    bool data_loading = false;
+    bool text_loading = false;
+    bool data_saving = false;
     for (int i = 1; i < argc; i++)
     {
         info.clearText();
         info.appendWord(argv[i]);
 
-        if (argv[i][0] == '-')
+        if (i == 1)
         {
-            if (i == 1)
+            if (argv[i][0] == '-')
+            {
+                switch(argv[i][1])
+                {
+                case 'd':
+                    data_loading = true;
+                    break;
+                case 't':
+                    text_loading = true;
+                    break;
+                default:
+                    PRINT_ERROR(info, "Wrong mode: required -d (data) or -t (text)");
+                }
+
+                if (strlen(argv[i]) > 2)
+                {
+                    PRINT_ERROR(info, "Wrong mode: required -d (data) or -t (text)");
+                }
+            }
+            else
+            {
+                PRINT_ERROR(info, "Wrong mode: required -d (data) or -t (text)");
+            }
+        }
+        else if (argv[i][0] == '-')
+        {
+            if (i == 2)
             {
                 PRINT_ERROR(info, "Files for the dictionary are required");
             }
@@ -47,15 +75,33 @@ int main(int argc, char* argv[])
             case 's':
                 corr.setMode(puza::Corrector::NO_CORRECTION);
                 break;
+            case 'e':
+                data_saving = true;
+                break;
             default:
                 PRINT_ERROR(info, "Wrong mode");
             }
 
             data_loading = false;
+            text_loading = false;
         }
         else if (data_loading)
         {
-            if (!corr.load(argv[i]))
+            if (!corr.load_data(argv[i]))
+            {
+                PRINT_ERROR(info, "File not found");
+            }
+        }
+        else if (text_loading)
+        {
+            if (!corr.load_text(argv[i]))
+            {
+                PRINT_ERROR(info, "File not found");
+            }
+        }
+        else if (data_saving)
+        {
+            if (!corr.save_data(argv[i]))
             {
                 PRINT_ERROR(info, "File not found");
             }

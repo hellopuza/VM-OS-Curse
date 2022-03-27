@@ -20,7 +20,9 @@ public:
 
     void setMode(int mode);
     void setParallel(bool parallel);
-    bool load(const char* filename);
+    bool load_text(const char* filename);
+    bool load_data(const char* filename);
+    bool save_data(const char* filename) const;
     bool process(const char* filename);
 
     enum CorrectionModes
@@ -30,7 +32,7 @@ public:
         NO_CORRECTION,
     };
 
-    static const size_t DICTIONARY_NUM_ = 20;
+    static const size_t DICTIONARY_NUM_ = 24;
     static const size_t MIN_WORD_LEN_ = 2;
     static const size_t MAX_LEV_DIST_ = 2;
     static const size_t INFORMER_WORDS_NUM_ = 5;

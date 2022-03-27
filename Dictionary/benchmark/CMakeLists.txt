@@ -13,8 +13,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -pthread")
 add_executable(${EXEC_NAME} ${DICT_BENCHMARK_SOURCES} ${DICT_SOURCES})
 target_include_directories(${EXEC_NAME} PUBLIC ${DICT_INCLUDE})
 
-add_custom_target(run_${EXEC_NAME}
-                COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${EXEC_NAME})
-add_dependencies(run_${EXEC_NAME} ${EXEC_NAME})
+add_custom_target(bench
+    COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/${EXEC_NAME} ${CMAKE_BINARY_DIR}/
+)
+add_dependencies(bench ${EXEC_NAME})
 
 target_link_libraries(${EXEC_NAME} benchmark::benchmark)
