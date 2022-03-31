@@ -21,10 +21,10 @@ public:
     void setThreadsNum(size_t threads_num);
     size_t getThreadsNum() const;
 
-    std::string findBestWord(const std::string& word, size_t max_lev_dist) const;
+    std::string* findBestWord(const std::string& word, size_t max_lev_dist) const;
 
 private:
-    std::string findBestWordParallel(const std::string& word, size_t max_lev_dist) const;
+    std::string* findBestWordParallel(const std::string& word, size_t max_lev_dist) const;
 
     size_t threads_num_ = 1;
 };

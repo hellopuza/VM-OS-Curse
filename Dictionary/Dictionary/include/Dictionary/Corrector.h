@@ -39,7 +39,7 @@ public:
 
 private:
     void parseText();
-    void updateOutput(const std::vector<std::string>& best_words, TextEditor::iterator* text_it);
+    void updateOutput(const std::vector<std::string*>& best_words, TextEditor::iterator* text_it);
 
     HashTable<size_t, Dictionary> dicts_;
     TextEditor text_;

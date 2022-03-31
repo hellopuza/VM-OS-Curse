@@ -6,8 +6,8 @@
 #include <fstream>
 #include <iostream>
 
-constexpr size_t ITER_NUM = 10;
-constexpr size_t MAX_THREADS_NUM = 1 << 6;
+constexpr size_t ITER_NUM = 1;
+constexpr size_t MAX_THREADS_NUM = 1 << 16;
 
 struct TestClass
 {
@@ -47,10 +47,7 @@ static void SingleThread(benchmark::State& state)
 {
     for (auto _ : state)
     {
-        for (size_t i = 0; i < ITER_NUM; i++)
-        {
-            test.findWord("hashtable", 1);
-        }
+        test.findWord("hashtable", 1);
     }
 }
 BENCHMARK(SingleThread)->Unit(benchmark::kMillisecond);
@@ -59,10 +56,7 @@ static void Paralleling(benchmark::State& state)
 {
     for (auto _ : state)
     {
-        for (size_t i = 0; i < ITER_NUM; i++)
-        {
-            test.findWord("hashtable", state.range());
-        }
+        test.findWord("hashtable", state.range());
     }
 }
 BENCHMARK(Paralleling)->DenseRange(2, MAX_THREADS_NUM, 1)->Unit(benchmark::kMillisecond);

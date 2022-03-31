@@ -16,14 +16,14 @@ size_t Dictionary::getThreadsNum() const
     return threads_num_;
 }
 
-std::string Dictionary::findBestWord(const std::string& word, size_t max_lev_dist) const
+std::string* Dictionary::findBestWord(const std::string& word, size_t max_lev_dist) const
 {
     if (threads_num_ > 1)
     {
         return findBestWordParallel(word, max_lev_dist);
     }
 
-    std::string best_word;
+    std::string* best_word = nullptr;
     size_t min_lev_dist = max_lev_dist;
     size_t max_freq = 0;
 
@@ -33,7 +33,7 @@ std::string Dictionary::findBestWord(const std::string& word, size_t max_lev_dis
         if ((ld <= min_lev_dist) && (dict_it.value > max_freq))
         {
             max_freq = dict_it.value;
-            best_word = dict_it.key;
+            best_word = const_cast<std::string*>(&dict_it.key);
             min_lev_dist = ld;
         }
     }
@@ -41,13 +41,13 @@ std::string Dictionary::findBestWord(const std::string& word, size_t max_lev_dis
     return best_word;
 }
 
-std::string Dictionary::findBestWordParallel(const std::string& word, size_t max_lev_dist) const
+std::string* Dictionary::findBestWordParallel(const std::string& word, size_t max_lev_dist) const
 {
     const size_t piece_len = size() / threads_num_;
 
     struct WordInfo
     {
-        std::string best_word;
+        std::string* word = nullptr;
         size_t min_lev_dist;
         size_t max_freq = 0;
     };
@@ -62,7 +62,7 @@ std::string Dictionary::findBestWordParallel(const std::string& word, size_t max
         size_t ld = lev_dist(word, node->key);
         if ((ld <= winfo->min_lev_dist) && (node->value > winfo->max_freq))
         {
-            winfo->best_word = node->key;
+            winfo->word = const_cast<std::string*>(&node->key);
             winfo->min_lev_dist = ld;
             winfo->max_freq = node->value;
         }
@@ -87,22 +87,26 @@ std::string Dictionary::findBestWordParallel(const std::string& word, size_t max
     bool finding_word = true;
     for (size_t i = 0; i < threads_num_; i++)
     {
-        if (finding_word && !best_words[i].best_word.empty())
+        if (finding_word && best_words[i].word)
         {
             winfo = best_words[i];
             finding_word = false;
         }
+        if (!winfo.word || !best_words[i].word)
+        {
+            continue;
+        }
 
-        size_t ld = lev_dist(winfo.best_word, best_words[i].best_word);
+        size_t ld = lev_dist(*winfo.word, *best_words[i].word);
         if ((ld <= winfo.min_lev_dist) && (best_words[i].max_freq > winfo.max_freq))
         {
-            winfo.best_word = best_words[i].best_word;
+            winfo.word = best_words[i].word;
             winfo.min_lev_dist = ld;
             winfo.max_freq = best_words[i].max_freq;
         }
     }
 
-    return winfo.best_word;
+    return winfo.word;
 }
 
 } // namespace puza

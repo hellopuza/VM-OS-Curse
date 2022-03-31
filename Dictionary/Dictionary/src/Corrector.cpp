@@ -127,7 +127,7 @@ void Corrector::parseText()
         if ((word.length() >= MIN_WORD_LEN_) && !(dicts_[word.length() - MIN_WORD_LEN_].contains(word)))
         {
             const size_t dicts_num = 3;
-            std::vector<std::string> best_words(dicts_num);
+            std::vector<std::string*> best_words(dicts_num);
             size_t dict_id = word.length() - MIN_WORD_LEN_;
 
             auto process = [&](size_t vec_ind, size_t dict_ind) -> void
@@ -150,16 +150,16 @@ void Corrector::parseText()
     }
 }
 
-void Corrector::updateOutput(const std::vector<std::string>& best_words, TextEditor::iterator* text_it)
+void Corrector::updateOutput(const std::vector<std::string*>& best_words, TextEditor::iterator* text_it)
 {
-    if (best_words[1].length() != 0)
+    if (best_words[1] && (best_words[1]->length() != 0))
     {
         if (process_mode_ != NO_CORRECTION)
         {
-            text_.replace(*text_it, best_words[1]);
+            text_.replace(*text_it, *best_words[1]);
             if (process_mode_ != NO_OUTPUT)
             {
-                info_.setMessage("Corrected to " + best_words[1]);
+                info_.setMessage("Corrected to " + *best_words[1]);
                 info_output_ += info_.getOutput();
             }
         }
@@ -168,7 +168,10 @@ void Corrector::updateOutput(const std::vector<std::string>& best_words, TextEdi
             std::string message("Found best words:");
             for (const auto& word : best_words)
             {
-                message += " " + word;
+                if (word)
+                {
+                    message += " " + *word;
+                }
             }
             info_.setMessage(message);
             info_output_ += info_.getOutput();
